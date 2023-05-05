@@ -1,0 +1,49 @@
+openapi: 3.0.1
+info:
+  title: E-Commerce App API
+  version: 1.0.0
+  description: A fully-functioning e-commerce application REST API
+paths:
+  /products:
+    get:
+  /products/{product_id}:
+    get:
+    put:
+    post:
+    delete:
+  /users:
+    get:
+  /users/{user_id}:
+    get:
+    put:
+    post:
+    delete:
+  /users/{user_id}/cart_items:
+    get:
+  /users/{user_id}/cart_items/{product_id}:
+    get:
+    put:
+    post:
+    delete:
+  /users/{user_id}/orders:
+    get:
+  /users/{user_id}/orders/{order_id}:
+    get:
+    put:
+    post:
+    delete:
+  /orders:
+    get:
+  /orders/{order_id}/:
+    get:
+    put:
+    post:
+    delete:
+  /auth/register
+    get:
+    post:
+  /auth/login
+    get:
+    post:
+  /auth/logout
+    get:
