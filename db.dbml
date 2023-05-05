@@ -14,6 +14,7 @@ Table users {
   name varchar(100) [not null]
   email varchar(100) [unique, not null]
   address varchar(500)
+  is_admin boolean
 }
 
 Table cart_items {

@@ -21,7 +21,8 @@ CREATE TABLE "users" (
   "id" integer PRIMARY KEY,
   "name" varchar(100) NOT NULL,
   "email" varchar(100) UNIQUE NOT NULL,
-  "address" varchar(500)
+  "address" varchar(500),
+  "is_admin" boolean
 );
 
 CREATE TABLE "cart_items" (
