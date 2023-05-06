@@ -365,7 +365,7 @@ paths:
         '204':
           $ref: '#/components/responses/deleteSuccess'
       tags:
-        - User - Shopping Cart
+        - Orders
   /auth/register:
     post:
       operationId: AuthRegisterUser
