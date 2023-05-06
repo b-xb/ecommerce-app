@@ -795,3 +795,8 @@ tags:
   description: add, view and delete Orders made by a specific user
 - name: Authentication
   description: actions related to user authentication
+servers:
+  - url: '{server}/api/v1'
+    variables:
+      server:
+        default: http://127.0.0.1:4001
