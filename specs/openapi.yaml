@@ -227,7 +227,7 @@ paths:
       operationId: addOrder
       summary: Add a new Order
       requestBody:
-        $ref: '#/components/requestBodies/NewOrder'
+        $ref: '#/components/requestBodies/NewOrderAndItems'
       responses:
         '201':
           $ref: '#/components/responses/orderSuccess'
@@ -297,6 +297,75 @@ paths:
           $ref: '#/components/responses/orderStatusSuccess'
       tags:
         - Orders
+  /orders/{orderId}/items:
+    get:
+      operationId: getOrderItemsByOrder
+      summary: Get all Order Items by Order ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderItemsSuccess'
+      tags:
+        - Orders
+    post:
+      operationId: addOrderItemsByOrder
+      summary: Add new Order Items by Order ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      requestBody:
+        $ref: '#/components/requestBodies/NewOrderItems'
+      responses:
+        '201':
+          $ref: '#/components/responses/orderItemsSuccess'
+      tags:
+        - Orders
+    delete:
+      operationId: deleteAllOrderItemsByOrder
+      summary: Delete all Order Items by Order ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - Orders
+  /orders/{orderId}/items/{productId}:
+    get:
+      operationId: getOrderItemByOrderAndProduct
+      summary: Get a Cart Item by User ID and Product ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      - $ref: '#/components/parameters/productId'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderItemSuccess'
+      tags:
+        - Orders
+    put:
+      operationId: updateOrderItemByOrderAndProduct
+      summary: Update an Order Item by Order ID and Product ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      - $ref: '#/components/parameters/productId'
+      requestBody:
+        $ref: '#/components/requestBodies/OrderItem'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderItemSuccess'
+      tags:
+        - Orders
+    delete:
+      operationId: deleteOrderItemByOrderAndProduct
+      summary: Delete an Order Item by Order ID and Product ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      - $ref: '#/components/parameters/productId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - User - Shopping Cart
   /auth/register:
     post:
       operationId: AuthRegisterUser
@@ -445,6 +514,55 @@ components:
           format: date-time
         status:
           $ref: '#/components/schemas/OrderStatus'
+    NewOrderItem:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int32
+          minimum: 0
+        amount:
+          type: integer
+          format: int32
+          minimum: 0
+    NewOrderItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/NewOrderItem'
+    NewOrderAndItems:
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/NewOrder'
+        orderItems:
+          $ref: '#/components/schemas/NewOrderItems'
+    OrderItem:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int32
+          minimum: 0
+        productId:
+          type: integer
+          format: int32
+          minimum: 0
+        amount:
+          type: integer
+          format: int32
+          minimum: 0
+        unit_price:
+          type: number
+          multipleOf: 0.01
+          minimum: 0
+        total_cost:
+          type: number
+          multipleOf: 0.01
+          minimum: 0
+    OrderItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrderItem'
     Order:
       type: object
       properties:
@@ -542,6 +660,18 @@ components:
           schema:
             $ref: '#/components/schemas/Orders'
       description: Success
+    orderItemSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderItem'
+      description: Success
+    orderItemsSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderItems'
+      description: Success
     orderStatusSuccess:
       content:
         application/json:
@@ -612,18 +742,38 @@ components:
           schema:
             $ref: '#/components/schemas/CartItem'
       required: true
-    NewOrder:
+    NewOrderAndItems:
       description: Information needed for creating a new Order object
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/NewOrder'
+            $ref: '#/components/schemas/NewOrderAndItems'
+    NewOrderItems:
+      description: Information needed for creating a new Order object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewOrderItems'
     Order:
       description: An Order object
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Order'
+      required: true
+    OrderItem:
+      description: An Order Item object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderItem'
+      required: true
+    OrderItems:
+      description: An Order Items object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderItems'
       required: true
     OrderStatus:
       description: An Order Status
