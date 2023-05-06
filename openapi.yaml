@@ -160,6 +160,8 @@ components:
           format: email
         address:
           type: string
+        password:
+          type: string
         is_admin:
           type: boolean
     Users:
