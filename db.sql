@@ -22,6 +22,7 @@ CREATE TABLE "users" (
   "name" varchar(100) NOT NULL,
   "email" varchar(100) UNIQUE NOT NULL,
   "address" varchar(500),
+  "password" varchar(50) NOT NULL,
   "is_admin" boolean
 );
 
