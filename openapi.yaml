@@ -6,44 +6,110 @@ info:
 paths:
   /products:
     get:
+      operationId: getProducts
+      summary: Gets all Products
+    post:
+      operationId: addProduct
+      summary: Adds a new Product
+    delete:
+      operationId: deleteAllProducts
+      summary: Delete all Products
   /products/{product_id}:
     get:
+      operationId: getProductById
+      summary: Gets a Product by Product ID
     put:
-    post:
+      operationId: updateProductById
+      summary: Updates a Product by Product ID
     delete:
+      operationId: deleteProductById
+      summary: Deletes a Product by Product ID
   /users:
     get:
+      operationId: getUsers
+      summary: Gets all Users
+    post:
+      operationId: addUser
+      summary: Adds a new User
+    delete:
+      operationId: deleteAllUsers
+      summary: Delete all Users
   /users/{user_id}:
     get:
+      operationId: getUserById
+      summary: Gets a User by User ID
     put:
-    post:
+      operationId: updateUserById
+      summary: Updates a User by User ID
     delete:
+      operationId: deleteUserById
+      summary: Deletes a User by User ID
   /users/{user_id}/cart_items:
     get:
+      operationId: getCartItemsByUser
+      summary: Gets all Cart Items by User ID
+    post:
+      operationId: addCartItemByUser
+      summary: Adds a new Cart Item by User ID
+    delete:
+      operationId: deleteAllCartItemsByUser
+      summary: Delete all Cart Items by User ID
   /users/{user_id}/cart_items/{product_id}:
     get:
+      operationId: getCartItemByUserAndProduct
+      summary: Gets a Cart Item by User ID and Product ID
     put:
-    post:
+      operationId: updateCartItemByUserAndProduct
+      summary: Updates a Cart Item by User ID and Product ID
     delete:
+      operationId: deleteCartItemByUserAndProduct
+      summary: Deletes a Cart Item by User ID and Product ID
   /users/{user_id}/orders:
     get:
-  /users/{user_id}/orders/{order_id}:
-    get:
-    put:
+      operationId: getOrdersByUser
+      summary: Gets all Orders by User ID
     post:
+      operationId: addOrderByUser
+      summary: Adds a new Order by User ID
     delete:
+      operationId: deleteAllOrdersByUser for User ID
+      summary: Delete all Orders by User ID
   /orders:
     get:
+      operationId: getOrders
+      summary: Gets all Orders
+    post:
+      operationId: addOrder
+      summary: Adds a new Order
+    delete:
+      operationId: deleteAllOrdersByUser
+      summary: Delete all Orders
   /orders/{order_id}/:
     get:
+      operationId: getOrderById
+      summary: Gets an Order by ID
     put:
-    post:
+      operationId: updateOrderById
+      summary: Updates an Order by ID
     delete:
-  /auth/register
+      operationId: deleteOrderById
+      summary: Deletes an Order by ID
+  /orders/{order_id}/status:
     get:
+      operationId: getOrderStatusByID
+      summary: Gets an Order Status by ID
+    put:
+      operationId: updateOrderStatusById
+      summary: Updates an Order Status by ID
+  /auth/register:
     post:
-  /auth/login
-    get:
+      operationId: AuthRegisterUser
+      summary: Registers a new User
+  /auth/login:
     post:
-  /auth/logout
-    get:
+      operationId: AuthLogin
+      summary: Authenticates a user and starts a session
+  /auth/logout:
+    post:
+      operationId: AuthLogout
+      summary: Registers a new User
