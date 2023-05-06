@@ -17,7 +17,7 @@ paths:
       operationId: addProduct
       summary: Add a new Product
       requestBody:
-        $ref: '#/components/requestBodies/Product'
+        $ref: '#/components/requestBodies/NewProduct'
       responses:
         '201':
           $ref: '#/components/responses/productSuccess'
@@ -227,7 +227,7 @@ paths:
       operationId: addOrder
       summary: Add a new Order
       requestBody:
-        $ref: '#/components/requestBodies/Order'
+        $ref: '#/components/requestBodies/NewOrder'
       responses:
         '201':
           $ref: '#/components/responses/orderSuccess'
@@ -338,6 +338,21 @@ components:
         - paid
         - posted
         - recieved
+    NewProduct:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        unit_price:
+          type: number
+          multipleOf: 0.01
+          minimum: 0
+        stock:
+          type: integer
+          format: int32
+          minimum: 0
     Product:
       type: object
       properties:
@@ -364,10 +379,6 @@ components:
     NewUser:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
-          minimum: 0
         name:
           type: string
         email:
@@ -422,6 +433,18 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/CartItem'
+    NewOrder:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+          minimum: 0
+        created:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/OrderStatus'
     Order:
       type: object
       properties:
@@ -546,6 +569,12 @@ components:
     emptyResponse:
       description: An empty response body
   requestBodies:
+    NewProduct:
+      description: Information needed for creating a new Product object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewProduct'
     Product:
       description: A Product object
       content:
@@ -581,6 +610,12 @@ components:
           schema:
             $ref: '#/components/schemas/CartItems'
       required: true
+    NewOrder:
+      description: Information needed for creating a new Order object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewOrder'
     Order:
       description: An order object
       content:
