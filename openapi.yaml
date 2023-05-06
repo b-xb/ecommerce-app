@@ -7,112 +7,337 @@ paths:
   /products:
     get:
       operationId: getProducts
-      summary: Gets all Products
+      summary: Get all Products
+      responses:
+        '200':
+          $ref: '#/components/responses/productsSuccess'
+      tags:
+        - Products
     post:
       operationId: addProduct
-      summary: Adds a new Product
+      summary: Add a new Product
+      requestBody:
+        $ref: '#/components/requestBodies/Product'
+      responses:
+        '201':
+          $ref: '#/components/responses/productSuccess'
+      tags:
+        - Products
     delete:
       operationId: deleteAllProducts
       summary: Delete all Products
-  /products/{product_id}:
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - Products
+  /products/{productId}:
     get:
       operationId: getProductById
-      summary: Gets a Product by Product ID
+      summary: Get a Product by Product ID
+      parameters:
+      - $ref: '#/components/parameters/productId'
+      responses:
+        '200':
+          $ref: '#/components/responses/productSuccess'
+      tags:
+        - Products
     put:
       operationId: updateProductById
-      summary: Updates a Product by Product ID
+      summary: Update a Product by Product ID
+      parameters:
+      - $ref: '#/components/parameters/productId'
+      requestBody:
+        $ref: '#/components/requestBodies/Product'
+      responses:
+        '200':
+          $ref: '#/components/responses/productSuccess'
+      tags:
+        - Products
     delete:
       operationId: deleteProductById
-      summary: Deletes a Product by Product ID
+      summary: Delete a Product by Product ID
+      parameters:
+      - $ref: '#/components/parameters/productId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - Products
   /users:
     get:
       operationId: getUsers
-      summary: Gets all Users
+      summary: Get all Users
+      responses:
+        '200':
+          $ref: '#/components/responses/usersSuccess'
+      tags:
+        - Users
     post:
       operationId: addUser
-      summary: Adds a new User
+      summary: Add a new User
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '201':
+          $ref: '#/components/responses/userSuccess'
+      tags:
+        - Users
     delete:
       operationId: deleteAllUsers
       summary: Delete all Users
-  /users/{user_id}:
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - Users
+  /users/{userId}:
     get:
       operationId: getUserById
-      summary: Gets a User by User ID
+      summary: Get a User by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/userSuccess'
+      tags:
+        - User - Profile
     put:
       operationId: updateUserById
-      summary: Updates a User by User ID
+      summary: Update a User by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '200':
+          $ref: '#/components/responses/userSuccess'
+      tags:
+        - User - Profile
     delete:
       operationId: deleteUserById
-      summary: Deletes a User by User ID
-  /users/{user_id}/cart_items:
+      summary: Delete a User by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - User - Profile
+  /users/{userId}/cart-items:
     get:
       operationId: getCartItemsByUser
-      summary: Gets all Cart Items by User ID
+      summary: Get all Cart Items by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/cartItemsSuccess'
+      tags:
+        - User - Shopping Cart
     post:
       operationId: addCartItemByUser
-      summary: Adds a new Cart Item by User ID
+      summary: Add a new Cart Item by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '201':
+          $ref: '#/components/responses/cartItemSuccess'
+      tags:
+        - User - Shopping Cart
     delete:
       operationId: deleteAllCartItemsByUser
       summary: Delete all Cart Items by User ID
-  /users/{user_id}/cart_items/{product_id}:
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - User - Shopping Cart
+  /users/{userId}/cart-items/{productId}:
     get:
       operationId: getCartItemByUserAndProduct
-      summary: Gets a Cart Item by User ID and Product ID
+      summary: Get a Cart Item by User ID and Product ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/productId'
+      responses:
+        '200':
+          $ref: '#/components/responses/cartItemSuccess'
+      tags:
+        - User - Shopping Cart
     put:
       operationId: updateCartItemByUserAndProduct
-      summary: Updates a Cart Item by User ID and Product ID
+      summary: Update a Cart Item by User ID and Product ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/productId'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '200':
+          $ref: '#/components/responses/cartItemSuccess'
+      tags:
+        - User - Shopping Cart
     delete:
       operationId: deleteCartItemByUserAndProduct
-      summary: Deletes a Cart Item by User ID and Product ID
-  /users/{user_id}/orders:
+      summary: Delete a Cart Item by User ID and Product ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/productId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - User - Shopping Cart
+  /users/{userId}/orders:
     get:
       operationId: getOrdersByUser
-      summary: Gets all Orders by User ID
+      summary: Get all Orders by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/ordersSuccess'
+      tags:
+        - User - Orders
     post:
       operationId: addOrderByUser
-      summary: Adds a new Order by User ID
+      summary: Add a new Order by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '201':
+          $ref: '#/components/responses/orderSuccess'
+      tags:
+        - User - Orders
     delete:
       operationId: deleteAllOrdersByUser for User ID
       summary: Delete all Orders by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - User - Orders
   /orders:
     get:
       operationId: getOrders
-      summary: Gets all Orders
+      summary: Get all Orders
+      responses:
+        '200':
+          $ref: '#/components/responses/ordersSuccess'
+      tags:
+        - Orders
     post:
       operationId: addOrder
-      summary: Adds a new Order
+      summary: Add a new Order
+      requestBody:
+        $ref: '#/components/requestBodies/Order'
+      responses:
+        '201':
+          $ref: '#/components/responses/orderSuccess'
+      tags:
+        - Orders
     delete:
       operationId: deleteAllOrdersByUser
       summary: Delete all Orders
-  /orders/{order_id}/:
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - Orders
+  /orders/{orderId}:
     get:
       operationId: getOrderById
-      summary: Gets an Order by ID
+      summary: Get an Order by ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderSuccess'
+      tags:
+        - Orders
     put:
       operationId: updateOrderById
-      summary: Updates an Order by ID
+      summary: Update an Order by ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      requestBody:
+        $ref: '#/components/requestBodies/Order'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderSuccess'
+      tags:
+        - Orders
     delete:
       operationId: deleteOrderById
-      summary: Deletes an Order by ID
-  /orders/{order_id}/status:
+      summary: Delete an Order by ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      responses:
+        '204':
+          $ref: '#/components/responses/deleteSuccess'
+      tags:
+        - Orders
+  /orders/{orderId}/status:
     get:
       operationId: getOrderStatusByID
-      summary: Gets an Order Status by ID
+      summary: Get an Order Status by ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderStatusSuccess'
+      tags:
+        - Orders
     put:
       operationId: updateOrderStatusById
-      summary: Updates an Order Status by ID
+      summary: Update an Order Status by ID
+      parameters:
+      - $ref: '#/components/parameters/orderId'
+      requestBody:
+        $ref: '#/components/requestBodies/OrderStatus'
+      responses:
+        '200':
+          $ref: '#/components/responses/orderStatusSuccess'
+      tags:
+        - Orders
   /auth/register:
     post:
       operationId: AuthRegisterUser
-      summary: Registers a new User
+      summary: Register a new User
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '201':
+          $ref: '#/components/responses/userSuccess'
+      tags:
+        - Authentication
   /auth/login:
     post:
       operationId: AuthLogin
-      summary: Authenticates a user and starts a session
+      summary: Authenticate a User and start a session
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '200':
+          $ref: '#/components/responses/userSuccess'
+      tags:
+        - Authentication
   /auth/logout:
     post:
       operationId: AuthLogout
-      summary: Registers a new User
+      summary: End User session
+      responses:
+        '204':
+          $ref: '#/components/responses/logoutSuccess'
+      tags:
+        - Authentication
 components:
   schemas:
     OrderStatus:
@@ -207,3 +432,143 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Order'
+  parameters:
+    userId:
+      name: userId
+      in: path
+      description: unique id for a User
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+    productId:
+      name: productId
+      in: path
+      description: unique id for a Product
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+    orderId:
+      name: orderId
+      in: path
+      description: unique id for an Order
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+  responses:
+    userSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+      description: Success
+    usersSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users'
+      description: Success
+    cartItemSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CartItem'
+      description: Success
+    cartItemsSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CartItems'
+      description: Success
+    productSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'
+      description: Success
+    productsSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Products'
+      description: Success
+    orderSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Order'
+      description: Success
+    ordersSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Orders'
+      description: Success
+    orderStatusSuccess:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderStatus'
+      description: Success
+    deleteSuccess:
+      content:
+        application/json:
+          schema:
+            type: string
+      description: Delete operation was successful
+    logoutSuccess:
+      content:
+        application/json:
+          schema:
+            type: string
+      description: Logout operation was successful
+    genericStringResponse:
+      content:
+        application/json:
+          schema:
+            type: string
+      description: A string response
+    emptyResponse:
+      description: An empty response body
+  requestBodies:
+    Product:
+      description: A Product object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'
+      required: true
+    User:
+      description: A User object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+      required: true
+    CartItems:
+      description: A Cart Items object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CartItems'
+      required: true
+    Order:
+      description: An order object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Order'
+      required: true
+    OrderStatus:
+      description: An Order Status
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderStatus'
+      required: true
+  
