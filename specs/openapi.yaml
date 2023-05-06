@@ -141,7 +141,7 @@ paths:
       parameters:
       - $ref: '#/components/parameters/userId'
       requestBody:
-        $ref: '#/components/requestBodies/User'
+        $ref: '#/components/requestBodies/CartItem'
       responses:
         '201':
           $ref: '#/components/responses/cartItemSuccess'
@@ -176,7 +176,7 @@ paths:
       - $ref: '#/components/parameters/userId'
       - $ref: '#/components/parameters/productId'
       requestBody:
-        $ref: '#/components/requestBodies/User'
+        $ref: '#/components/requestBodies/CartItem'
       responses:
         '200':
           $ref: '#/components/responses/cartItemSuccess'
@@ -603,12 +603,12 @@ components:
           schema:
             $ref: '#/components/schemas/User'
       required: true
-    CartItems:
-      description: A Cart Items object
+    CartItem:
+      description: A Cart Item object
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CartItems'
+            $ref: '#/components/schemas/CartItem'
       required: true
     NewOrder:
       description: Information needed for creating a new Order object
