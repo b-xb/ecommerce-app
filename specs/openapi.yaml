@@ -553,12 +553,14 @@ components:
         application/json:
           schema:
             type: string
+          example: Delete operation was successful
       description: Delete operation was successful
     logoutSuccess:
       content:
         application/json:
           schema:
             type: string
+          example: Logout operation was successful
       description: Logout operation was successful
     genericStringResponse:
       content:
@@ -583,14 +585,14 @@ components:
             $ref: '#/components/schemas/Product'
       required: true
     NewUser:
-      description: A Product object
+      description: Information needed for creating a new User object
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/NewUser'
       required: true
     UserLogin:
-      description: A Product object
+      description: Information needed to authenticate a User
       content:
         application/json:
           schema:
@@ -617,7 +619,7 @@ components:
           schema:
             $ref: '#/components/schemas/NewOrder'
     Order:
-      description: An order object
+      description: An Order object
       content:
         application/json:
           schema:
