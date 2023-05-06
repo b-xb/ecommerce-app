@@ -595,4 +595,16 @@ components:
           schema:
             $ref: '#/components/schemas/OrderStatus'
       required: true
-  
+tags:
+- name: Products
+  description: add, view, update and delete Products
+- name: Orders
+  description: add, view, update and delete Orders
+- name: Users
+  description: add, view, update and delete Users
+- name: User - Shopping Cart
+  description: add, view, update and delete Cart Items for a specific user
+- name: User - Orders
+  description: add, view and delete Orders made by a specific user
+- name: Authentication
+  description: actions related to user authentication
