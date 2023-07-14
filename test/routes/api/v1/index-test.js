@@ -3,9 +3,9 @@ const request = require('supertest');
 
 const app = require('../../../../app');
 
-describe('/api/v1/', function() {
-  describe('GET /api/v1/', function() {
-    it('returns response OK', function() {
+describe('/api/v1/', () => {
+  describe('GET /api/v1/', () => {
+    it('returns response OK', () => {
       return request(app)
         .get('/api/v1')
         .expect(204)
