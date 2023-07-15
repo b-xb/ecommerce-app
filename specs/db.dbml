@@ -2,7 +2,7 @@
 // Docs: https://dbml.dbdiagram.io/docs
 
 Table products {
-  id integer [pk]
+  id uuid [pk]
   name varchar(50) [not null]
   description text
   unit_price numeric(6,2) [not null, default:0]
@@ -10,7 +10,7 @@ Table products {
 }
 
 Table users {
-  id integer [pk]
+  id uuid [pk]
   name varchar(100) [not null]
   email varchar(100) [unique, not null]
   address varchar(500)
@@ -19,8 +19,8 @@ Table users {
 }
 
 Table cart_items {
-  user_id integer [pk, ref: > users.id]
-  product_id integer [pk, ref: > products.id]
+  user_id uuid [pk, ref: > users.id]
+  product_id uuid [pk, ref: > products.id]
   amount integer [not null, default:0]
 }
 
@@ -33,15 +33,15 @@ enum order_status {
 }
 
 Table orders {
-  id integer [pk]
-  user_id integer [ref: > users.id]
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
   created timestamp [not null]
   status order_status [not null]
 }
 
 Table order_items {
-  order_id integer [pk, ref: > orders.id]
-  product_id integer [pk, ref: > products.id]
+  order_id uuid [pk, ref: > orders.id]
+  product_id uuid [pk, ref: > products.id]
   amount integer [not null, default:0]
   unit_price numeric(6,2) [not null, default:0]
   total_cost numeric(6,2) [not null, default:0]

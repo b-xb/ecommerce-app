@@ -1,8 +1,8 @@
 const express = require('express');
 const apiRouter = express.Router();
 
-const bodyParser = require('body-parser');
-apiRouter.use(bodyParser.json());
+apiRouter.use(express.urlencoded({ extended: true }));
+apiRouter.use(express.json());
 
 const productsRouter = require('./products.js');
 apiRouter.use('/products', productsRouter);

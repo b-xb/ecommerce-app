@@ -368,7 +368,7 @@ paths:
         - Orders
   /auth/register:
     post:
-      operationId: AuthRegisterUser
+      operationId: authRegisterUser
       summary: Register a new User
       requestBody:
         $ref: '#/components/requestBodies/NewUser'
@@ -379,7 +379,7 @@ paths:
         - Authentication
   /auth/login:
     post:
-      operationId: AuthLogin
+      operationId: authLogin
       summary: Authenticate a User and start a User session
       requestBody:
         $ref: '#/components/requestBodies/UserLogin'
@@ -390,7 +390,7 @@ paths:
         - Authentication
   /auth/logout:
     post:
-      operationId: AuthLogout
+      operationId: authLogout
       summary: End User session
       responses:
         '204':
@@ -426,9 +426,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         name:
           type: string
         description:
@@ -469,9 +468,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         name:
           type: string
         email:
@@ -487,13 +485,11 @@ components:
       type: object
       properties:
         userId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         productId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         amount:
           type: integer
           format: int32
@@ -506,9 +502,8 @@ components:
       type: object
       properties:
         userId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         created:
           type: string
           format: date-time
@@ -518,9 +513,8 @@ components:
       type: object
       properties:
         productId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         amount:
           type: integer
           format: int32
@@ -540,13 +534,11 @@ components:
       type: object
       properties:
         orderId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         productId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         amount:
           type: integer
           format: int32
@@ -567,13 +559,11 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         userId:
-          type: integer
-          format: int32
-          minimum: 0
+          type: string
+          format: uuid
         created:
           type: string
           format: date-time
@@ -590,27 +580,24 @@ components:
       description: unique id for a User
       required: true
       schema:
-        type: integer
-        format: int32
-        minimum: 0
+        type: string
+        format: uuid
     productId:
       name: productId
       in: path
       description: unique id for a Product
       required: true
       schema:
-        type: integer
-        format: int32
-        minimum: 0
+        type: string
+        format: uuid
     orderId:
       name: orderId
       in: path
       description: unique id for an Order
       required: true
       schema:
-        type: integer
-        format: int32
-        minimum: 0
+        type: string
+        format: uuid
   responses:
     userSuccess:
       content:
