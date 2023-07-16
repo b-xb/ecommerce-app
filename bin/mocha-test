@@ -5,4 +5,4 @@ set -e
 export NODE_ENV=test
 tests_that_are_not_features="$(ls test/*/*-test.js test/*/*/*-test.js test/*/*/*/*-test.js 2> /dev/null | grep -v features)"
 
-mocha ${tests_that_are_not_features}
+mocha ${tests_that_are_not_features} $@
