@@ -1,0 +1,3 @@
+id,name,email,address,password,is_admin
+3f90f3a6-4de0-498a-9b6c-ea0bf1b73791,ben,ben@ben.com,"My address",$2b$10$Chw6lWsxw2gM6bJR.AYlFOgqHOWMAmdo6jpdw7BBNrDye/NbDgETa,true
+8552a25d-1b11-4cf2-a59c-ee41b75fc45f,liam,liam@liam.com,"Liam's address",$2b$10$pqlQ5Yzn/XMd80OuL8u9BeQXz8gl/u4CLzONf5ej.40ARZM/8qYg.,false

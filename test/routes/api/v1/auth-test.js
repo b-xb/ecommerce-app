@@ -7,15 +7,11 @@ const pool = require('../../../../models/database');
 
 describe('/api/v1/auth', () => {
 
+  afterEach('Remove test user data', async () => {
+    await pool.query(`TRUNCATE users CASCADE`)
+  })
+
   describe('POST /api/v1/auth/register', () => {
-
-    beforeEach('create temporary pg table',async function () {
-      await pool.query('CREATE TEMPORARY TABLE users (LIKE users INCLUDING ALL)') // This will copy constraints also
-    })
-
-    afterEach('dispose of temporary pg table',async function () {
-      await pool.query('DROP TABLE IF EXISTS pg_temp.users');
-    })
 
     it('returns user information and 201 successfully created response', async () => {
 
@@ -108,17 +104,11 @@ describe('/api/v1/auth', () => {
         .type('application/json')
         .send(JSON.stringify(userLogin))
 
-        assert.equal(loginResponse.status, 200);
+      assert.equal(loginResponse.status, 200);
 
-        const { id, name, email, address } = loginResponse.body;
+      assert.equal(loginResponse.body.message,"successful login");
 
-        assert.equal(name, newUser.name);
-        assert.equal(email, newUser.email);
-        assert.equal(address, newUser.address);
 
-        expect(validate(id)).to.be.true;
-        assert.equal(version(id),4);
-        assert.equal(id, registerResponse.body.id);
     });
 
     it('allows different newly registered user to log in', async () => {
@@ -148,17 +138,12 @@ describe('/api/v1/auth', () => {
         .type('application/json')
         .send(JSON.stringify(userLogin))
 
-        assert.equal(loginResponse.status, 200);
+      assert.equal(loginResponse.status, 200);
 
-        const { id, name, email, address } = loginResponse.body;
+      assert.equal(loginResponse.body.message,"successful login");
 
-        assert.equal(name, newUser.name);
-        assert.equal(email, newUser.email);
-        assert.equal(address, newUser.address);
 
-        expect(validate(id)).to.be.true;
-        assert.equal(version(id),4);
-        assert.equal(id, registerResponse.body.id);
+
     });
   });
 
@@ -174,6 +159,9 @@ describe('/api/v1/auth', () => {
     });
 
     it.skip('rejects login attempt when invalid password provided', () => {
+    });
+
+    it.skip('must be logged out in order to register', () => {
     });
   })
 });

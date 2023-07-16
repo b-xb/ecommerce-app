@@ -9,3 +9,8 @@ exports.login = async (email, password) => pool.query(
   'SELECT id, name, email, address FROM users WHERE email = $1 AND password = $2',
   [email, password]
 );
+
+exports.fetchPassword = async (email) => pool.query(
+  'SELECT id, password FROM users WHERE email = $1',
+  [email]
+);
