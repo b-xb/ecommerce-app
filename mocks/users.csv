@@ -1,3 +1,5 @@
 id,name,email,address,password,is_admin
 3f90f3a6-4de0-498a-9b6c-ea0bf1b73791,ben,ben@ben.com,"My address",$2b$10$Chw6lWsxw2gM6bJR.AYlFOgqHOWMAmdo6jpdw7BBNrDye/NbDgETa,true
 8552a25d-1b11-4cf2-a59c-ee41b75fc45f,liam,liam@liam.com,"Liam's address",$2b$10$pqlQ5Yzn/XMd80OuL8u9BeQXz8gl/u4CLzONf5ej.40ARZM/8qYg.,false
+9a7900a3-778c-4812-8b62-16ddd4e0c9e1,chris,chris@chris.com,"Chris's address",$2b$10$xou2BMixyWpr87E7nV5gHuKpUMnOI3FctgLIGb5I00mpMkWXImkJS,false
+f9ffae5d-e3c6-4edc-a857-329fe8a13ec7,bee,bee@bee.com,"Bee's address",$2b$10$zI/8KOeSytMMHXtJn.XnJOjO5xAL2hFEE5wmnU9KB9X2/inNgdn0K,false

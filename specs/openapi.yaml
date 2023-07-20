@@ -83,14 +83,6 @@ paths:
           $ref: '#/components/responses/userSuccess'
       tags:
         - Users
-    delete:
-      operationId: deleteAllUsers
-      summary: Delete all Users
-      responses:
-        '204':
-          $ref: '#/components/responses/deleteSuccess'
-      tags:
-        - Users
   /users/{userId}:
     get:
       operationId: getUserById

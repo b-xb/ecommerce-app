@@ -10,6 +10,17 @@ const PORT = process.env.PORT || 4001;
 require("./config/passport");
 
 // Session Config
+// TODO: switch out below for a more secure setup - perhaps change this setting based on environment
+// e.g.
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     cookie: { maxAge: 1000 * 60 *60 * 24, secure: true, sameSite: "none" },
+//     saveUninitialized: false,
+//     resave: false,
+//   })
+// );
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,

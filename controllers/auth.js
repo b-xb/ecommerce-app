@@ -9,6 +9,7 @@ exports.authRegisterUser =  async (req, res) => {
   const id = uuidv4();
 
   try {
+
     // Hash password before storing in local DB:
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
