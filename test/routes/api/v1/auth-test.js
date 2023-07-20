@@ -5,13 +5,17 @@ const { validate, version }  = require("uuid");
 const app = require('../../../../app');
 const pool = require('../../../../models/database');
 
+const { pipeline } = require('node:stream/promises')
+const fs = require('node:fs')
+const { from: copyFrom } = require('pg-copy-streams')
+
 describe('/api/v1/auth', () => {
 
-  afterEach('Remove test user data', async () => {
-    await pool.query(`TRUNCATE users CASCADE`)
-  })
-
   describe('POST /api/v1/auth/register', () => {
+
+    afterEach('Remove test user data', async () => {
+      await pool.query(`TRUNCATE users CASCADE`)
+    });
 
     it('returns user information and 201 successfully created response', async () => {
 
@@ -145,6 +149,9 @@ describe('/api/v1/auth', () => {
 
 
     });
+
+    it.skip('must be logged out in order to register', () => {
+    });
   });
 
 
@@ -161,7 +168,53 @@ describe('/api/v1/auth', () => {
     it.skip('rejects login attempt when invalid password provided', () => {
     });
 
-    it.skip('must be logged out in order to register', () => {
+    it.skip('must be logged out in order to log in', () => {
     });
-  })
+  });
+
+  describe('POST /api/v1/auth/logout', () => {
+
+    before('Insert test user data', async () => {
+      const client = await pool.connect()
+      try {
+        const ingestStream = client.query(copyFrom(`COPY users FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/users.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release()
+      }
+    })
+
+    after('Remove test user data', async () => {
+      await pool.query(`TRUNCATE users CASCADE`)
+    })
+
+    it('throws an error when logging out while not already logged in ', async () => {
+      const response = await request(app)
+        .post('/api/v1/auth/logout');
+
+      assert.equal(response.status, 401);
+    });
+
+    it('log out successfully when user is logged in', async () => {
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin));
+
+      assert.equal(loginResponse.status, 200);
+
+      const response = await agent
+        .post('/api/v1/auth/logout');
+
+      assert.equal(response.status, 204);
+    });
+  });
 });
