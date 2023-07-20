@@ -23,14 +23,6 @@ paths:
           $ref: '#/components/responses/productSuccess'
       tags:
         - Products
-    delete:
-      operationId: deleteAllProducts
-      summary: Delete all Products
-      responses:
-        '204':
-          $ref: '#/components/responses/deleteSuccess'
-      tags:
-        - Products
   /products/{productId}:
     get:
       operationId: getProductById
