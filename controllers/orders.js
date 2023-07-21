@@ -22,7 +22,35 @@ exports.getOrders = async (req, res) => {
 };
 
 exports.getOrderById = async (req, res) => {
-  return res.json();
+  const id = req.params.orderId;
+
+  if (req.isAuthenticated()) {
+    try {
+      const getOrdersResponse = await getById(id);
+
+      if (getOrdersResponse.rowCount===1) {
+
+        const userId = getOrdersResponse.rows[0]["user_id"];
+
+        // user can only see their own orders
+        // admin can see any order
+        if (req.user["is_admin"] || userId === req.user["id"]){
+          return res.json(getOrdersResponse.rows[0]);
+        } else {
+          return res.status(403).json();
+        }
+
+      } else {
+        return res.status(404).json({error:"Unable to find order"});
+      }
+
+    } catch (error) {
+      return res.status(400).json({error});
+    }
+  } else {
+    // show nothing to unauthenticated users
+    return res.status(401).json();
+  }
 };
 
 exports.updateOrderById = async (req, res) => {
