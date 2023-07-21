@@ -1,5 +1,27 @@
 
 
+## Timezone settings
+
+This codebase is setup to work with the node environement and postgres environment both having their timezones set to 'UTC'
+
+### Set node timezone to UTC
+
+add the following line to the `.env` file at the base of the project
+
+```
+TZ = 'UTC'
+```
+
+### Set postgres to UTC
+
+in postgresql.conf make sure the variable `timezone` is set to `UTC`, as follows
+
+```
+timezone = 'UTC'
+```
+
+## Test suite notes
+
 Filter running the test scripts
 
 ```
