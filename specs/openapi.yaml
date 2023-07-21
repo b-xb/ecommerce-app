@@ -188,8 +188,20 @@ paths:
           $ref: '#/components/responses/ordersSuccess'
       tags:
         - User - Orders
+    post:
+      operationId: addOrderByUser
+      summary: Add a new Order by User ID
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      requestBody:
+        $ref: '#/components/requestBodies/NewOrderAndItems'
+      responses:
+        '201':
+          $ref: '#/components/responses/orderSuccess'
+      tags:
+        - User - Orders
     delete:
-      operationId: deleteAllOrdersByUser for User ID
+      operationId: deleteAllOrdersByUser
       summary: Delete all Orders by User ID
       parameters:
       - $ref: '#/components/parameters/userId'
@@ -205,24 +217,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ordersSuccess'
-      tags:
-        - Orders
-    post:
-      operationId: addOrder
-      summary: Add a new Order
-      requestBody:
-        $ref: '#/components/requestBodies/NewOrderAndItems'
-      responses:
-        '201':
-          $ref: '#/components/responses/orderSuccess'
-      tags:
-        - Orders
-    delete:
-      operationId: deleteAllOrdersByUser
-      summary: Delete all Orders
-      responses:
-        '204':
-          $ref: '#/components/responses/deleteSuccess'
       tags:
         - Orders
   /orders/{orderId}:
@@ -260,7 +254,7 @@ paths:
         - Orders
   /orders/{orderId}/status:
     get:
-      operationId: getOrderStatusByID
+      operationId: getOrderStatusById
       summary: Get an Order Status by ID
       parameters:
       - $ref: '#/components/parameters/orderId'
@@ -485,9 +479,6 @@ components:
     NewOrder:
       type: object
       properties:
-        userId:
-          type: string
-          format: uuid
         created:
           type: string
           format: date-time

@@ -591,5 +591,23 @@ describe('/api/v1/users', () => {
 
       assert.equal(deleteChrisResponse.status, 401);
     });
-  })
-})
+  });
+
+  describe('GET /api/v1/users/{userId}/cart-items', () => {
+  });
+
+  describe('POST /api/v1/users/{userId}/cart-items', () => {
+  });
+
+  describe('DELETE /api/v1/users/{userId}/cart-items', () => {
+  });
+
+  describe('GET /api/v1/users/{userId}/orders', () => {
+  });
+
+  describe('POST /api/v1/users/{userId}/orders', () => {
+  });
+
+  describe('DELETE /api/v1/users/{userId}/orders', () => {
+  });
+});
