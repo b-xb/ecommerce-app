@@ -564,23 +564,491 @@ describe('/api/v1/orders', () => {
   });
 
   describe('GET /api/v1/orders/{orderId}/items', () => {
-  });
 
-  describe('GET /api/v1/orders/{orderId}/items/{productId}', () => {
+    before('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    before('Insert test order item data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY order_items FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orderItems.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    after('Remove test order item data', async () => {
+      await pool.query(`TRUNCATE order_items CASCADE`)
+    });
+
+    after('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    it('Public should not be able to use this path', async () => {
+
+      const agent = request.agent(app);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 401);
+
+      const chrisOrderResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisOrderResponse.status, 401);
+
+    });
+
+    it('Admin should be able to see items for any order', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 200);
+      expect(liamOrderResponse.body).to.be.an.instanceof(Array);
+      expect(liamOrderResponse.body).to.have.lengthOf(5);
+
+      const chrisOrderResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisOrderResponse.status, 200);
+      expect(chrisOrderResponse.body).to.be.an.instanceof(Array);
+      expect(chrisOrderResponse.body).to.have.lengthOf(2);
+
+    });
+
+    it('Non-admin should only be able to see their own orders', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 200);
+      expect(liamOrderResponse.body).to.be.an.instanceof(Array);
+      expect(liamOrderResponse.body).to.have.lengthOf(5);
+
+      const chrisOrderResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisOrderResponse.status, 403);
+
+    });
   });
 
   describe('POST /api/v1/orders/{orderId}/items', () => {
+    it.skip("TODO");
   });
 
   describe('DELETE /api/v1/orders/{orderId}/items', () => {
+
+    before('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    beforeEach('Insert test order item data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY order_items FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orderItems.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    afterEach('Remove test order item data', async () => {
+      await pool.query(`TRUNCATE order_items CASCADE`)
+    });
+
+    after('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    it('Public should not be able to use this path', async () => {
+
+      const agent = request.agent(app);
+
+      const liamOrderResponse = await agent
+        .delete('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 401);
+
+      const chrisOrderResponse = await agent
+        .delete('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisOrderResponse.status, 401);
+
+    });
+
+    it('Admin should be able to delete items for any order', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamDeleteOrderItemsResponse = await agent
+        .delete('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamDeleteOrderItemsResponse.status, 204);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 200);
+      expect(liamOrderResponse.body).to.be.an.instanceof(Array);
+      expect(liamOrderResponse.body).to.have.lengthOf(0);
+
+      const chrisDeleteOrderItemsResponse = await agent
+        .delete('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisDeleteOrderItemsResponse.status, 204);
+
+      const chrisOrderResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisOrderResponse.status, 200);
+      expect(chrisOrderResponse.body).to.be.an.instanceof(Array);
+      expect(chrisOrderResponse.body).to.have.lengthOf(0);
+
+    });
+
+    it('Non-admin should not be able to delete order items directly', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamDeleteOrderItemsResponse = await agent
+        .delete('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamDeleteOrderItemsResponse.status, 403);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 200);
+      expect(liamOrderResponse.body).to.be.an.instanceof(Array);
+      expect(liamOrderResponse.body).to.have.lengthOf(5);
+
+      const chrisDeleteOrderItemsResponse = await agent
+        .delete('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      assert.equal(chrisDeleteOrderItemsResponse.status, 403);
+
+    });
   });
 
   describe('GET /api/v1/orders/{orderId}/items/{productId}', () => {
+
+    before('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    before('Insert test order item data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY order_items FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orderItems.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    after('Remove test order item data', async () => {
+      await pool.query(`TRUNCATE order_items CASCADE`)
+    });
+
+    after('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    const liamOrderItem = {
+      "order_id":"27916b0f-8866-4cc6-a33c-0c8a17a12f31",
+      "product_id":"9427fca9-92dc-4e89-ab25-0e1697909ca3",
+      "amount":10,
+      "unit_price":"1.00",
+      "total_cost":"10.00",
+    }
+
+    const chrisOrderItem = {
+      "order_id":"17e28cad-1fab-4859-b7f9-b592a0130e9b",
+      "product_id":"39933790-4e28-4337-9e11-5cd87f14d8e6",
+      "amount":5,
+      "unit_price":"100.00",
+      "total_cost":"500.00",
+    }
+
+    it('Public should not be able to use this path', async () => {
+
+      const agent = request.agent(app);
+
+      const liamOrderItemResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamOrderItemResponse.status, 401);
+
+      const chrisOrderItemResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisOrderItemResponse.status, 401);
+
+    });
+
+    it('Admin should be able to see items for any order', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamOrderItemResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamOrderItemResponse.status, 200);
+      assert.deepEqual(liamOrderItemResponse.body, liamOrderItem);
+
+      const chrisOrderItemResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisOrderItemResponse.status, 200);
+      assert.deepEqual(chrisOrderItemResponse.body, chrisOrderItem);
+
+    });
+
+    it('Non-admin should only be able to see their own orders', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamOrderItemResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamOrderItemResponse.status, 200);
+      assert.deepEqual(liamOrderItemResponse.body, liamOrderItem);
+
+      const chrisOrderItemResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisOrderItemResponse.status, 403);
+
+    });
   });
 
   describe('POST /api/v1/orders/{orderId}/items/{productId}', () => {
   });
 
   describe('DELETE /api/v1/orders/{orderId}/items/{productId}', () => {
+
+    before('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    beforeEach('Insert test order item data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY order_items FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orderItems.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    afterEach('Remove test order item data', async () => {
+      await pool.query(`TRUNCATE order_items CASCADE`)
+    });
+
+    after('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    it('Public should not be able to use this path', async () => {
+
+      const agent = request.agent(app);
+
+      const liamDeleteOrderItemResponse = await agent
+        .delete('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamDeleteOrderItemResponse.status, 401);
+
+      const chrisDeleteOrderItemResponse = await agent
+        .delete('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisDeleteOrderItemResponse.status, 401);
+
+    });
+
+    it('Admin should be able to delete items for any order', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamDeleteOrderItemResponse = await agent
+        .delete('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamDeleteOrderItemResponse.status, 204);
+
+      const liamOrderItemResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamOrderItemResponse.status, 404);
+
+      const chrisDeleteOrderItemsResponse = await agent
+        .delete('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisDeleteOrderItemsResponse.status, 204);
+
+      const chrisOrderItemResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisOrderItemResponse.status, 404);
+
+    });
+
+    it('Non-admin should not be able to update order items directly', async () => {
+
+      const agent = request.agent(app);
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamDeleteOrderItemResponse = await agent
+        .delete('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamDeleteOrderItemResponse.status, 204);
+
+      const liamOrderItemResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3');
+
+      assert.equal(liamOrderItemResponse.status, 404);
+
+      const chrisDeleteOrderItemsResponse = await agent
+        .delete('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/39933790-4e28-4337-9e11-5cd87f14d8e6');
+
+      assert.equal(chrisDeleteOrderItemsResponse.status, 403);
+
+   });
+
   });
 })

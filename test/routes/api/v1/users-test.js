@@ -595,12 +595,15 @@ describe('/api/v1/users', () => {
   });
 
   describe('GET /api/v1/users/{userId}/cart-items', () => {
+    it.skip("TODO");
   });
 
   describe('POST /api/v1/users/{userId}/cart-items', () => {
+    it.skip("TODO");
   });
 
   describe('DELETE /api/v1/users/{userId}/cart-items', () => {
+    it.skip("TODO");
   });
 
   describe('GET /api/v1/users/{userId}/orders', () => {
@@ -713,6 +716,7 @@ describe('/api/v1/users', () => {
   });
 
   describe('POST /api/v1/users/{userId}/orders', () => {
+    it.skip("TODO");
   });
 
   describe('DELETE /api/v1/users/{userId}/orders', () => {
