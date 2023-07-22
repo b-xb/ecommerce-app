@@ -1,6 +1,6 @@
 const uuid  = require("uuid");
 const { getById } = require("../models/orders");
-const { getByOrderId, deleteByOrderId, getByOrderIdAndProductId, updateByOrderIdAndProductId, deleteByOrderIdAndProductId } = require("../models/orderItems");
+const { add, getByOrderId, deleteByOrderId, getByOrderIdAndProductId, updateByOrderIdAndProductId, deleteByOrderIdAndProductId } = require("../models/orderItems");
 
 exports.getOrderItemsByOrder = async (req, res) => {
   const orderId = req.params.orderId;
@@ -39,10 +39,6 @@ exports.getOrderItemsByOrder = async (req, res) => {
     // show nothing to unauthenticated users
     return res.status(401).json();
   }
-};
-
-exports.addOrderItemsByOrder = async (req, res) => {
-  return res.json();
 };
 
 exports.deleteAllOrderItemsByOrder = async (req, res) => {
@@ -125,6 +121,48 @@ exports.getOrderItemByOrderAndProduct = async (req, res) => {
     // show nothing to unauthenticated users
     return res.status(401).json();
   }
+};
+
+exports.addOrderItemByOrderAndProduct = async (req, res) => {
+  const orderId = req.params.orderId;
+  const productId = req.params.productId;
+  const { amount, unitPrice } = req.body;
+
+  if (!uuid.validate(orderId))
+    return res.status(400).json();
+
+  if (!uuid.validate(productId))
+    return res.status(400).json();
+
+  if (req.isAuthenticated()) {
+
+    if (req.user["is_admin"]) {
+
+      // allow admin to add new order items
+      try {
+        const totalCost = amount * unitPrice;
+
+        const addOrderItemResponse = await add(orderId,productId,amount,unitPrice,totalCost);
+
+        if (addOrderItemResponse.rowCount===1) {
+          return res.status(201).json({orderId,productId,amount,unitPrice,totalCost});
+        } else {
+          return res.status(400).json({error:"Unable to add order item"});
+        }
+      } catch (error) {
+        res.status(500).json({error});
+      }
+
+    } else {
+      // do not allow non-admins to add an order item
+      return res.status(403).json();
+    }
+
+  } else {
+    // do not allow non-admins to add an order item
+    return res.status(401).json();
+  }
+
 };
 
 exports.updateOrderItemByOrderAndProduct = async (req, res) => {
