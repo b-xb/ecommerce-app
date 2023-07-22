@@ -928,7 +928,182 @@ describe('/api/v1/orders', () => {
     });
   });
 
-  describe('POST /api/v1/orders/{orderId}/items/{productId}', () => {
+  describe('PUT /api/v1/orders/{orderId}/items/{productId}', () => {
+
+    before('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    beforeEach('Insert test order item data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY order_items FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orderItems.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    afterEach('Remove test order item data', async () => {
+      await pool.query(`TRUNCATE order_items CASCADE`)
+    });
+
+    after('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    const liamUpdateOrderItemRequest = {
+      amount: 30,
+      unitPrice: 0.50,
+    };
+
+    const chrisUpdateOrderItemRequest = {
+      amount: 20,
+      unitPrice: 50.00,
+    };
+
+    it('Public should not be able to use this path', async () => {
+
+      const agent = request.agent(app);
+
+      const liamOrderUpdateResponse = await agent
+        .put('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3')
+        .type('application/json')
+        .send(JSON.stringify(liamUpdateOrderItemRequest));
+
+      assert.equal(liamOrderUpdateResponse.status, 401);
+
+      const chrisOrderUpdateResponse = await agent
+        .put('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/6f2c3dc6-fde5-4852-8bd4-7a927b317204')
+        .type('application/json')
+        .send(JSON.stringify(chrisUpdateOrderItemRequest));
+
+      assert.equal(chrisOrderUpdateResponse.status, 401);
+
+    });
+
+    it('Admin should be able to add items to any order', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin));
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamOrderUpdateResponse = await agent
+        .put('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3')
+        .type('application/json')
+        .send(JSON.stringify(liamUpdateOrderItemRequest));
+
+      assert.equal(liamOrderUpdateResponse.status, 200);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 200);
+
+      expect(liamOrderResponse.body).to.be.an.instanceof(Array);
+      expect(liamOrderResponse.body).to.have.lengthOf(5);
+
+      expect(liamOrderResponse.body).to.include.deep.members([
+        {
+          "order_id":"27916b0f-8866-4cc6-a33c-0c8a17a12f31",
+          "product_id":"9427fca9-92dc-4e89-ab25-0e1697909ca3",
+          "amount":30,
+          "unit_price":"0.50",
+          "total_cost":"15.00",
+        }
+      ]);
+
+      const chrisOrderUpdateResponse = await agent
+        .put('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/6f2c3dc6-fde5-4852-8bd4-7a927b317204')
+        .type('application/json')
+        .send(JSON.stringify(chrisUpdateOrderItemRequest));
+
+      assert.equal(chrisOrderUpdateResponse.status, 200);
+
+      const chrisOrderResponse = await agent
+        .get('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items');
+
+      expect(chrisOrderResponse.body).to.be.an.instanceof(Array);
+      expect(chrisOrderResponse.body).to.have.lengthOf(2);
+
+      expect(chrisOrderResponse.body).to.include.deep.members([
+        {
+          "order_id":"17e28cad-1fab-4859-b7f9-b592a0130e9b",
+          "product_id":"6f2c3dc6-fde5-4852-8bd4-7a927b317204",
+          "amount":20,
+          "unit_price":"50.00",
+          "total_cost":"1000.00"
+        }
+      ]);
+    });
+
+    it('Non-admin should not be able to use this path', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin));
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamOrderUpdateResponse = await agent
+        .put('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items/9427fca9-92dc-4e89-ab25-0e1697909ca3')
+        .type('application/json')
+        .send(JSON.stringify(liamUpdateOrderItemRequest));
+
+      assert.equal(liamOrderUpdateResponse.status, 403);
+
+      const liamOrderResponse = await agent
+        .get('/api/v1/orders/27916b0f-8866-4cc6-a33c-0c8a17a12f31/items');
+
+      assert.equal(liamOrderResponse.status, 200);
+
+      expect(liamOrderResponse.body).to.be.an.instanceof(Array);
+      expect(liamOrderResponse.body).to.have.lengthOf(5);
+
+      expect(liamOrderResponse.body).to.include.deep.members([
+        {
+          "order_id":"27916b0f-8866-4cc6-a33c-0c8a17a12f31",
+          "product_id":"9427fca9-92dc-4e89-ab25-0e1697909ca3",
+          "amount":10,
+          "unit_price":"1.00",
+          "total_cost":"10.00"
+        }
+      ]);
+
+      const chrisOrderUpdateResponse = await agent
+        .put('/api/v1/orders/17e28cad-1fab-4859-b7f9-b592a0130e9b/items/6f2c3dc6-fde5-4852-8bd4-7a927b317204')
+        .type('application/json')
+        .send(JSON.stringify(chrisUpdateOrderItemRequest));
+
+      assert.equal(chrisOrderUpdateResponse.status, 403);
+
+    });
   });
 
   describe('DELETE /api/v1/orders/{orderId}/items/{productId}', () => {

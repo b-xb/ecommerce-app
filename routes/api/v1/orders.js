@@ -14,7 +14,7 @@ router.get('/:orderId/items', getOrderItemsByOrder);
 router.post('/:orderId/items', addOrderItemsByOrder);
 router.delete('/:orderId/items', deleteAllOrderItemsByOrder);
 router.get('/:orderId/items/:productId', getOrderItemByOrderAndProduct);
-router.post('/:orderId/items/:productId', updateOrderItemByOrderAndProduct);
+router.put('/:orderId/items/:productId', updateOrderItemByOrderAndProduct);
 router.delete('/:orderId/items/:productId', deleteOrderItemByOrderAndProduct);
 
 

@@ -1,6 +1,6 @@
 const uuid  = require("uuid");
 const { getById } = require("../models/orders");
-const { getByOrderId, deleteByOrderId, getByOrderIdAndProductId, deleteByOrderIdAndProductId } = require("../models/orderItems");
+const { getByOrderId, deleteByOrderId, getByOrderIdAndProductId, updateByOrderIdAndProductId, deleteByOrderIdAndProductId } = require("../models/orderItems");
 
 exports.getOrderItemsByOrder = async (req, res) => {
   const orderId = req.params.orderId;
@@ -128,7 +128,42 @@ exports.getOrderItemByOrderAndProduct = async (req, res) => {
 };
 
 exports.updateOrderItemByOrderAndProduct = async (req, res) => {
-  return res.json();
+
+  const orderId = req.params.orderId;
+  const productId = req.params.productId;
+  const { amount, unitPrice } = req.body;
+
+  if (!uuid.validate(orderId))
+    return res.status(400).json();
+
+  if (!uuid.validate(productId))
+    return res.status(400).json();
+
+  if (req.isAuthenticated()) {
+
+    try {
+      // only admins can update order items directly
+      if (req.user["is_admin"]){
+        const updateOrderItemResponse = await updateByOrderIdAndProductId(orderId,productId,amount,unitPrice);
+
+        if (updateOrderItemResponse.rowCount===1) {
+          return res.status(200).json({message:"Successfully updated"});
+        } else {
+          return res.status(404).json({error:"Order items not found for this product"});
+        }
+
+      } else {
+        return res.status(403).json();
+      }
+
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({error});
+    }
+  } else {
+    // show nothing to unauthenticated users
+    return res.status(401).json();
+  }
 };
 
 exports.deleteOrderItemByOrderAndProduct = async (req, res) => {

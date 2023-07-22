@@ -15,6 +15,11 @@ exports.getByOrderIdAndProductId = async (orderId,productId) => pool.query(
   [orderId,productId]
 );
 
+exports.updateByOrderIdAndProductId= async (orderId,productId,amount,unitPrice) => pool.query(
+  'UPDATE order_items SET amount = $3, unit_price = $4, total_cost = $5 WHERE order_id = $1 AND product_id = $2',
+  [orderId,productId,amount,unitPrice,amount*unitPrice]
+);
+
 exports.deleteByOrderIdAndProductId = async (orderId,productId) => pool.query(
   'DELETE FROM order_items WHERE order_id = $1 AND product_id = $2',
   [orderId,productId]
