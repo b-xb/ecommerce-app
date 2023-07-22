@@ -230,18 +230,6 @@ paths:
           $ref: '#/components/responses/orderSuccess'
       tags:
         - Orders
-    put:
-      operationId: updateOrderById
-      summary: Update an Order by ID
-      parameters:
-      - $ref: '#/components/parameters/orderId'
-      requestBody:
-        $ref: '#/components/requestBodies/Order'
-      responses:
-        '200':
-          $ref: '#/components/responses/orderSuccess'
-      tags:
-        - Orders
     delete:
       operationId: deleteOrderById
       summary: Delete an Order by ID

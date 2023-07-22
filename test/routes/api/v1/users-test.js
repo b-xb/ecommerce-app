@@ -1,5 +1,6 @@
 const {expect, assert} = require('chai');
 const request = require('supertest');
+const uuid  = require("uuid");
 
 const app = require('../../../../app');
 
@@ -603,11 +604,238 @@ describe('/api/v1/users', () => {
   });
 
   describe('GET /api/v1/users/{userId}/orders', () => {
+
+    before('Insert test user data', async () => {
+      const client = await pool.connect()
+      try {
+        const ingestStream = client.query(copyFrom(`COPY users FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/users.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release()
+      }
+    })
+
+    before('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    after('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    after('Remove test user data', async () => {
+      await pool.query(`TRUNCATE users CASCADE`)
+    })
+
+    it('Public should not be able to use this path', async () => {
+
+      const liamResponse = await request(app)
+        .get('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamResponse.status, 401);
+
+      const chrisResponse = await request(app)
+        .get('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisResponse.status, 401);
+
+    });
+
+    it('Admin should be able to see all orders', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamResponse = await agent
+        .get('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamResponse.status, 200);
+      expect(liamResponse.body).to.be.an.instanceof(Array);
+      expect(liamResponse.body).to.have.lengthOf(3);
+
+      const chrisResponse = await agent
+        .get('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisResponse.status, 200);
+      expect(chrisResponse.body).to.be.an.instanceof(Array);
+      expect(chrisResponse.body).to.have.lengthOf(2);
+
+    });
+
+    it('Non-admin should not be able to use this path', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamResponse = await agent
+        .get('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamResponse.status, 200);
+      expect(liamResponse.body).to.be.an.instanceof(Array);
+      expect(liamResponse.body).to.have.lengthOf(3);
+
+      const chrisResponse = await agent
+        .get('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisResponse.status, 403);
+
+    });
   });
 
   describe('POST /api/v1/users/{userId}/orders', () => {
   });
 
   describe('DELETE /api/v1/users/{userId}/orders', () => {
+
+    before('Insert test user data', async () => {
+      const client = await pool.connect()
+      try {
+        const ingestStream = client.query(copyFrom(`COPY users FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/users.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release()
+      }
+    })
+
+    beforeEach('Insert test order data', async () => {
+      const client = await pool.connect();
+      try {
+        const ingestStream = client.query(copyFrom(`COPY orders FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/orders.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release();
+      }
+    });
+
+    afterEach('Remove test order data', async () => {
+      await pool.query(`TRUNCATE orders CASCADE`)
+    });
+
+    after('Remove test user data', async () => {
+      await pool.query(`TRUNCATE users CASCADE`)
+    })
+
+    it('Public should not be able to use this path', async () => {
+
+      const liamResponse = await request(app)
+        .delete('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamResponse.status, 401);
+
+      const chrisResponse = await request(app)
+        .delete('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisResponse.status, 401);
+
+    });
+
+    it('Admin should be able to delete all orders', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"ben@ben.com",
+        "password":"benspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamDeleteResponse = await agent
+        .delete('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamDeleteResponse.status, 204);
+
+      const liamResponse = await agent
+        .get('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamResponse.status, 200);
+      expect(liamResponse.body).to.be.an.instanceof(Array);
+      expect(liamResponse.body).to.have.lengthOf(0);
+
+      const chrisDeleteResponse = await agent
+        .delete('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisDeleteResponse.status, 204);
+
+      const chrisResponse = await agent
+        .get('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisResponse.status, 200);
+      expect(chrisResponse.body).to.be.an.instanceof(Array);
+      expect(chrisResponse.body).to.have.lengthOf(0);
+
+    });
+
+    it('Non-admin should not be able to use this path', async () => {
+
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin))
+
+      assert.equal(loginResponse.status, 200);
+
+      const liamDeleteResponse = await agent
+        .delete('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamDeleteResponse.status, 403);
+
+      const liamResponse = await agent
+        .get('/api/v1/users/8552a25d-1b11-4cf2-a59c-ee41b75fc45f/orders');
+
+      assert.equal(liamResponse.status, 200);
+      expect(liamResponse.body).to.be.an.instanceof(Array);
+      expect(liamResponse.body).to.have.lengthOf(3);
+
+      const chrisDeleteResponse = await agent
+        .delete('/api/v1/users/9a7900a3-778c-4812-8b62-16ddd4e0c9e1/orders');
+
+      assert.equal(chrisDeleteResponse.status, 403);
+
+    });
   });
 });
