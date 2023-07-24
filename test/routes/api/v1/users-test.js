@@ -1,6 +1,6 @@
 const {expect, assert} = require('chai');
 const request = require('supertest');
-const uuid  = require("uuid");
+const uuid = require("uuid");
 
 const app = require('../../../../app');
 
@@ -1455,7 +1455,7 @@ describe('/api/v1/users', () => {
 
     });
 
-    it('Non-admin should not be able to use this path', async () => {
+    it('Non-admin should be able to see their own orders only', async () => {
 
       const agent = request.agent(app)
 

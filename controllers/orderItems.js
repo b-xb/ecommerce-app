@@ -187,7 +187,7 @@ exports.updateOrderItemByOrderAndProduct = async (req, res) => {
         if (updateOrderItemResponse.rowCount===1) {
           return res.status(200).json({message:"Successfully updated"});
         } else {
-          return res.status(404).json({error:"Order items not found for this product"});
+          return res.status(404).json({error:"Order item not found for this product"});
         }
 
       } else {
