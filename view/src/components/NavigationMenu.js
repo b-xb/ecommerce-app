@@ -15,7 +15,7 @@ function NavigationMenu() {
         <Container fluid>
           <Navbar.Brand href="#">Navbar Offcanvas</Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-          {/* <Navbar.Offcanvas
+          <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-${expand}`}
             aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
             placement="end"
@@ -53,7 +53,7 @@ function NavigationMenu() {
                 <Button variant="outline-success">Search</Button>
               </Form>
             </Offcanvas.Body>
-          </Navbar.Offcanvas> */}
+          </Navbar.Offcanvas>
         </Container>
       </Navbar>
     </div>
