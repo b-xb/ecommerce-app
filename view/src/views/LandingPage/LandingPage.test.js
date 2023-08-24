@@ -3,9 +3,8 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import App from './App';
-import { MemoryRouter } from 'react-router-dom';
 
-test('Navigation Menu is loaded', () => {
+test('Landing Page redirects to the store page', () => {
   const route = "/";
   const { getByText } = render(
     <Provider store={store}>
@@ -14,6 +13,5 @@ test('Navigation Menu is loaded', () => {
       </MemoryRouter>
     </Provider>
   );
-
-  expect(getByText(/Navbar Offcanvas/)).toBeInTheDocument();
+  expect(getByText(/Store/)).toBeInTheDocument();
 });
