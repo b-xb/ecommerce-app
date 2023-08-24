@@ -1,8 +1,14 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import AttributionInfo from './AttributionInfo';
+import PageNotFound from './PageNotFound';
 
 function Pages() {
   return (
-    <div>Pages</div>
+    <Routes>
+      <Route path="/attribution-info" element={<AttributionInfo />} />
+      <Route path="/*" element={<PageNotFound />} />
+    </Routes>
   );
 }
 

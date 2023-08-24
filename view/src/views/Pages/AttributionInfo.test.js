@@ -5,8 +5,8 @@ import { store } from '../../app/store';
 import App from '../../app/App';
 import { MemoryRouter } from 'react-router-dom';
 
-test('Landing Page redirects to the store page', async () => {
-  const route = "/";
+test('/attribution-info path should load Attribution page', () => {
+  const route = "/attribution-info";
   const { getByTestId } = render(
     <Provider store={store}>
       <MemoryRouter initialEntries={[route]}>
@@ -14,5 +14,6 @@ test('Landing Page redirects to the store page', async () => {
       </MemoryRouter>
     </Provider>
   );
-  expect(getByTestId(/store/)).toBeInTheDocument();
+
+  expect(getByTestId(/attribution-info/)).toBeInTheDocument();
 });
