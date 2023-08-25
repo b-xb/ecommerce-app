@@ -1,0 +1,11 @@
+footer .nav-link, footer .nav-link:focus {
+  color:var(--bs-dark);
+}
+
+footer .nav-link:hover  {
+  color:var(--bs-secondary);
+}
+
+footer .nav-link:active {
+  color:var(--bs-dark);
+}

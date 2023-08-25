@@ -1,11 +1,18 @@
 import React from 'react';
+import Page from './components/Page';
+import PageTitle from './components/PageTitle';
 
 function AttributionInfo() {
   return (
-    <>
-      <h1 data-testid="attribution-info">Attributions</h1>
-      <a href="https://www.vecteezy.com/vector-art/7620250-shopping-bag-icon-set-of-4-ecommerce-design-element">Shopping Bag Icon Vector by Grapict Studio</a>
-    </>
+    <Page>
+      <PageTitle title="Attributions" dataTestId="attribution-info"/>
+      <a
+        href="https://www.vecteezy.com/vector-art/7620250-shopping-bag-icon-set-of-4-ecommerce-design-element"
+        target="_blank"
+      >
+        Shopping Bag Icon Vector by Grapict Studio
+      </a>
+    </Page>
   );
 }
 

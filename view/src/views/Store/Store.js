@@ -10,7 +10,7 @@ function Store() {
         {Array.from({ length: 10 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
-              <Card.Img variant="top" src="images/no-image.svg" />
+              <Card.Img variant="top" src="/images/no-image.svg" />
               <Card.Body>
                 <Card.Title>Card title</Card.Title>
                 <Card.Text>
