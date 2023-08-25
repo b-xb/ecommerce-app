@@ -9,7 +9,7 @@ import { Link, NavLink } from 'react-router-dom';
 function NavigationMenu() {
   const expand = "md";
   return (
-    <header>
+    <header className="fixed-top">
       <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3 flex-shrink-0">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">Navbar Offcanvas</Navbar.Brand>
