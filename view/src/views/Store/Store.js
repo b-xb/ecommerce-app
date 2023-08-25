@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 function Store() {
   return (
     <div data-testid="store">
-      <Row xs={1} md={4} className="g-4">
+      <Row xs={1} md={2} lg={4} className="g-4">
         {Array.from({ length: 10 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
