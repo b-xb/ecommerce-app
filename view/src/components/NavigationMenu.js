@@ -5,14 +5,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link, NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function NavigationMenu() {
+  const { t, i18n } = useTranslation();
   const expand = "md";
   return (
     <header className="fixed-top">
       <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3 flex-shrink-0">
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">Navbar Offcanvas</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">{t("Website Title")}</Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-${expand}`}

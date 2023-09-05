@@ -7,6 +7,8 @@ import App from './app/App';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import './i18n';
+
 const container = document.getElementById('root');
 const root = createRoot(container);
 
