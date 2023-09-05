@@ -1,19 +1,15 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import { render } from '../utils/test-utils';
 import App from './App';
 import { MemoryRouter } from 'react-router-dom';
 
 test('Navigation Menu is loaded', () => {
   const route = "/";
-  const { getByText } = render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[route]}>
-        <App />
-      </MemoryRouter>
-    </Provider>
+  const { getByTestId } = render(
+    <MemoryRouter initialEntries={[route]}>
+      <App />
+    </MemoryRouter>
   );
 
-  expect(getByText(/Navbar Offcanvas/)).toBeInTheDocument();
+  expect(getByTestId(/components--nav-menu/)).toBeInTheDocument();
 });

@@ -12,7 +12,7 @@ function NavigationMenu() {
   const expand = "md";
   return (
     <header className="fixed-top">
-      <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3 flex-shrink-0">
+      <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3 flex-shrink-0" data-testid="components--nav-menu">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">{t("Website Title")}</Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
