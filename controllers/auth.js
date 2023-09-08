@@ -29,7 +29,10 @@ exports.authRegisterUser =  async (req, res) => {
 exports.authLogin = passport.authenticate("local");
 
 exports.authLoginSuccess = async (req, res) => {
-  res.status(200).json( { message: "successful login" } );
+  res.status(200).json( {
+    message: "successful login",
+    userId: req.user.id,
+  } );
 };
 
 exports.authLogout = async (req, res) => {
