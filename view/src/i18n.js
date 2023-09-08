@@ -10,6 +10,7 @@ i18n
       loadPath: '/locales/{{lng}}/{{ns}}.json'
     },
     lng: "en",
+    fallbackLng: "en",
     interpolation: {
       escapeValue: false // react already safes from xss
     }
