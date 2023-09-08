@@ -5,6 +5,7 @@ import Login from './Login';
 import PageNotFound from '../Pages/PageNotFound';
 import Logout from './Logout';
 import Register from './Register';
+import RegistrationSuccessful from './RegistrationSuccessful';
 
 function Authentication() {
   return (
@@ -12,6 +13,7 @@ function Authentication() {
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/registrationSuccessful" element={<RegistrationSuccessful />} />
       <Route path="/*" element={<PageNotFound />} />
     </Routes>
   );

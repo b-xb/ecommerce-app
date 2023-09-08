@@ -1,8 +1,9 @@
 import React from 'react';
+import LoginForm from '../../features/authentication/logInForm/LoginForm';
 
 function Login() {
   return (
-    <div data-testid="auth--login">Login</div>
+    <LoginForm />
   );
 }
 

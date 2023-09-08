@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
+import authReducer from '../features/authentication';
+import myAccountReducer from '../features/myAccount';
 
 export const store = configureStore({
   reducer: {
-    dummy: createSlice({
-      name: "name",
-      initialState: {},
-    }).reducer
+    auth: authReducer,
+    myAccount: myAccountReducer,
   },
 });
