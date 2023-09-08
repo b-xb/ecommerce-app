@@ -3,9 +3,12 @@ require('dotenv').config();
 const session = require("express-session");
 const store = new session.MemoryStore();
 const passport = require("passport");
+var cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 4001;
+
+app.use(cors());
 
 require("./config/passport");
 
