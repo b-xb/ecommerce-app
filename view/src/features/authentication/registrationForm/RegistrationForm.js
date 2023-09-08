@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectName, selectEmail, selectPassword, selectAddress, setName, setEmail, setPassword, setAddress, isSending, registrationSuccessful, submitRegistrationForm } from './registrationFormSlice';
 
 function RegistrationForm() {
-  console.log("form reloaded");
 
   const name = useSelector(selectName);
   const address = useSelector(selectAddress);

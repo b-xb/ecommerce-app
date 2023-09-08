@@ -9,8 +9,6 @@ function UserProfile() {
   const profileIsLoading = useSelector(isLoading);
   const dispatch = useDispatch();
 
-  console.log(userProfile);
-
   useEffect(() => {
     if (userId) {
       dispatch(loadUserProfile(userId));
