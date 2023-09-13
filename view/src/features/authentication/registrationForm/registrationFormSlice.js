@@ -22,7 +22,7 @@ export const submitRegistrationForm = createAsyncThunk(
 
 export const registrationFormSlice = createSlice({
   name: 'auth/registrationForm',
-  initialState: { ...initialState },
+  initialState,
   reducers: {
     setName: (state, action) => {
       state.form.name = action.payload;
@@ -36,6 +36,16 @@ export const registrationFormSlice = createSlice({
     setAddress: (state, action) => {
       state.form.address = action.payload;
     },
+    resetForm: (state) => {
+      state.form = {
+        "name":"",
+        "email":"",
+        "address":"",
+        "password":"",
+      };
+      state.isSending = false;
+      state.success = false;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -44,18 +54,12 @@ export const registrationFormSlice = createSlice({
       })
       .addCase(submitRegistrationForm.fulfilled, (state,action) => {
         state.isSending = false;
-        state.form = {
-          "name":"",
-          "email":"",
-          "address":"",
-          "password":"",
-        };
         state.success = true;
       });
   },
 });
 
-export const { setName, setEmail, setPassword, setAddress } = registrationFormSlice.actions;
+export const { setName, setEmail, setPassword, setAddress, resetForm } = registrationFormSlice.actions;
 
 export const selectName = (state) => state.auth.registrationForm.form.name;
 export const selectEmail = (state) => state.auth.registrationForm.form.email;

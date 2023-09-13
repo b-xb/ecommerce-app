@@ -6,11 +6,13 @@ import Form from 'react-bootstrap/Form';
 import { Navigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectEmail, selectPassword, setEmail, setPassword, isSending, loginSuccessful, submitLoginForm } from './loginFormSlice';
+import { selectEmail, selectPassword, setEmail, setPassword, /* isSending, */ submitLoginForm } from './loginFormSlice';
+import { selectLoginState } from '../../../features/authentication/session/sessionSlice';
 
 function LoginForm() {
   const email = useSelector(selectEmail);
   const password = useSelector(selectPassword);
+  const loggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -24,11 +26,9 @@ function LoginForm() {
   };
 
   //TODO: use this variable for something...
-  const formIsBeingSubmitted = useSelector(isSending);
+  // const formIsBeingSubmitted = useSelector(isSending);
 
-  const successfulSubmission = useSelector(loginSuccessful);
-
-  if (successfulSubmission) {
+  if (loggedIn) {
     return <Navigate to="/my/account" />
   }
 

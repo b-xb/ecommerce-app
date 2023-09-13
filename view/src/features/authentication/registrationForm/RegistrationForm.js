@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectName, selectEmail, selectPassword, selectAddress, setName, setEmail, setPassword, setAddress, isSending, registrationSuccessful, submitRegistrationForm } from './registrationFormSlice';
+import { selectLoginState } from '../../../features/authentication/session/sessionSlice';
 
 
 function RegistrationForm() {
@@ -15,6 +16,7 @@ function RegistrationForm() {
   const address = useSelector(selectAddress);
   const email = useSelector(selectEmail);
   const password = useSelector(selectPassword);
+  const loggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -31,6 +33,10 @@ function RegistrationForm() {
 
   const formIsBeingSubmitted = useSelector(isSending);
   const successfulSubmission = useSelector(registrationSuccessful);
+
+  if (loggedIn) {
+    return <Navigate to="/my/account" />
+  }
 
   if (successfulSubmission) {
     return <Navigate to="/auth/registrationSuccessful" />

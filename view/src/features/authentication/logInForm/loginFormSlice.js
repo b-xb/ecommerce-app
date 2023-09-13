@@ -15,8 +15,8 @@ export const submitLoginForm = createAsyncThunk(
   'auth/loginForm/login',
   async (form,{dispatch}) => {
     const response = await authLogin(form);
-    const { userId } = response;
-    if (userId) {
+    const { success, userId } = response;
+    if (success && userId) {
       dispatch(setSession({userId}))
     }
     return response;
