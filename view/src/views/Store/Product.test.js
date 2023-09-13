@@ -3,12 +3,13 @@ import { render } from '../../utils/test-utils';
 import App from '../../app/App';
 import { MemoryRouter } from 'react-router-dom';
 
-test('Landing Page redirects to the store page', async () => {
-  const route = "/";
+test('/store/product/:id path should load the Product Details page', () => {
+  const route = "/store/product/temp-id";
   const { getByTestId } = render(
     <MemoryRouter initialEntries={[route]}>
       <App />
     </MemoryRouter>
   );
-  expect(getByTestId(/^store$/)).toBeInTheDocument();
+
+  expect(getByTestId(/store-product-details/)).toBeInTheDocument();
 });
