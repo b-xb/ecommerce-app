@@ -1,9 +1,20 @@
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
+import Button from 'react-bootstrap/Button';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import { submitLogoutRequest } from '../../features/authentication/logoutRequest/logoutRequestSlice';
 
 function PrivateMenuItems() {
+
+  const dispatch = useDispatch();
+
+  const handleLogout = async (e) => {
+    dispatch(submitLogoutRequest());
+  };
+
   const expand = "md";
   return (
     <>
@@ -23,7 +34,7 @@ function PrivateMenuItems() {
         </NavDropdown.Item>
       </NavDropdown>
 
-      <Nav.Link as={NavLink} to="/auth/logout">Log Out</Nav.Link>
+      <Button onClick={handleLogout}>Log Out</Button>
     </>
   );
 }

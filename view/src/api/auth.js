@@ -23,3 +23,16 @@ export const authLogin = async (form) => {
   const responseData = await response.json();
   return responseData;
 }
+
+export const authLogout = async () => {
+  const response = await fetch(`${API_ENDPOINT}/auth/logout`, {
+    method: "POST",
+  });
+
+  if(response.ok) {
+    const responseData = await response.json();
+    return responseData;
+  } else {
+    return null;
+  }
+}

@@ -19,10 +19,14 @@ export const sessionSlice = createSlice({
         state.loginState = false;
       }
     },
+    clearSession: (state) => {
+      state.userId = null;
+      state.loginState = false;
+    }
   },
 });
 
-export const { setSession } = sessionSlice.actions;
+export const { setSession, clearSession } = sessionSlice.actions;
 
 export const selectUserId = (state) => state.auth.session.userId;
 export const selectLoginState = (state) => state.auth.session.loginState;

@@ -8,6 +8,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectName, selectEmail, selectPassword, selectAddress, setName, setEmail, setPassword, setAddress, isSending, registrationSuccessful, submitRegistrationForm } from './registrationFormSlice';
 
+
 function RegistrationForm() {
 
   const name = useSelector(selectName);
