@@ -1,9 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+const defaultState = {
   userId: null,
   loginState: false,
 };
+
+const storeSession = (sessionState) => {
+  localStorage.setItem('e-commerce-session', JSON.stringify(sessionState));
+}
+
+const loadSession = () => {
+  const sessionState = localStorage.getItem('e-commerce-session');
+  if (sessionState===null) {
+    return defaultState;
+  } else {
+    return JSON.parse(sessionState);
+  }
+}
+
+const initialState = loadSession();
+
 
 export const sessionSlice = createSlice({
   name: 'auth/session',
@@ -18,10 +34,12 @@ export const sessionSlice = createSlice({
         state.userId = null;
         state.loginState = false;
       }
+      storeSession(state);
     },
     clearSession: (state) => {
       state.userId = null;
       state.loginState = false;
+      storeSession(state);
     }
   },
 });
