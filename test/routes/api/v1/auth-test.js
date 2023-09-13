@@ -214,7 +214,7 @@ describe('/api/v1/auth', () => {
       const response = await agent
         .post('/api/v1/auth/logout');
 
-      assert.equal(response.status, 204);
+      assert.equal(response.status, 200);
     });
   });
 });

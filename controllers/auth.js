@@ -32,6 +32,7 @@ exports.authLoginSuccess = async (req, res) => {
   res.status(200).json( {
     message: "successful login",
     userId: req.user.id,
+    success: true,
   } );
 };
 
@@ -40,10 +41,15 @@ exports.authLogout = async (req, res) => {
   if (req.isAuthenticated()) {
     req.logout(function(err) {
     if (err) { return res.status(400).json(err); }
-      return res.status(204).send("Logout operation was successful");
+      return res.status(200).json({
+        message:"Logout operation was successful",
+        success: true,
+      });
     });
   } else {
-    res.status(401).send("Must be logged in, in order to log out");
+    res.status(401).json({
+      message:"Must be logged in, in order to log out",
+    });
   }
 
 };
