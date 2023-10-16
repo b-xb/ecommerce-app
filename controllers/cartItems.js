@@ -112,7 +112,10 @@ exports.updateCartItemByUserAndProduct = async (req, res) => {
         const updateCartItemResponse = await updateByUserIdAndProductId(userId,productId,amount);
 
         if (updateCartItemResponse.rowCount===1) {
-          return res.status(200).json({message:"Successfully updated"});
+          return res.status(200).json({
+            message:"Successfully updated",
+            success: true,
+          });
         } else {
           return res.status(400).json({error:"Unable to update cart item"});
         }
@@ -149,7 +152,10 @@ exports.deleteCartItemByUserAndProduct = async (req, res) => {
         const deleteCartItemResponse = await deleteByUserIdAndProductId(userId,productId);
 
         if (deleteCartItemResponse.rowCount===1) {
-          return res.status(204).json({message:"Successfully updated"});
+          return res.status(204).json({
+            message:"Successfully deleted",
+            success: true,
+          });
         } else {
           return res.status(404).json({error:"Cart item for this product not found"});
         }

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getProducts, getProductById } from '../../../api/products';
+import { getProducts } from '../../../api/products';
 
 const initialState = {
   isLoading: false,
@@ -32,6 +32,12 @@ export const productsSlice = createSlice({
 });
 
 export const selectProducts = (state) => state.store.products.products;
+export const selectProductById = (state, productId) => {
+  return state.store.products.products.filter(
+    (product) => product.id === productId
+  )?.[0];
+}
+
 export const isLoading = (state) => state.store.products.isLoading;
 
 export default productsSlice.reducer;

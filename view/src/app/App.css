@@ -2,3 +2,8 @@ main {
   min-height: calc(100vh - 4.5rem);
   padding-top: 4.5rem;
 }
+
+button.rounded-circle {
+  height: 31px;
+  width: 31px;
+}

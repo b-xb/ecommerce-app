@@ -11,5 +11,5 @@ test('/store/cart path should load the Shopping Cart view', () => {
     </MemoryRouter>
   );
 
-  expect(getByTestId(/store-shopping-cart/)).toBeInTheDocument();
+  expect(getByTestId(/^store-cart$/)).toBeInTheDocument();
 });

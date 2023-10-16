@@ -1,10 +1,16 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import PageNotFound from '../../Pages/PageNotFound';
+import CartView from './CartView';
+import CheckoutView from './CheckoutView';
 
 function ShoppingCart() {
   return (
-    <div data-testid="store-shopping-cart">
-      Shopping Cart
-    </div>
+    <Routes>
+      <Route path="/" element={<CartView />} />
+      <Route path="/checkout/" element={<CheckoutView />} />
+      <Route path="/*" element={<PageNotFound />} />
+    </Routes>
   );
 }
 
