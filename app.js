@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 4001;
 
 app.use(cors());
 
+app.use(express.static('build')); // serve static files (css & js) from the 'public' directory
+
 require("./config/passport");
 
 // Session Config
