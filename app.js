@@ -10,7 +10,9 @@ const PORT = process.env.PORT || 4001;
 
 app.use(cors());
 
-app.use(express.static('build')); // serve static files (css & js) from the 'public' directory
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'build')));
 
 require("./config/passport");
 
@@ -42,6 +44,10 @@ app.use(passport.session());
 
 const apiRouter = require('./routes/api/v1');
 app.use('/api/v1',apiRouter);
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // This conditional is here for testing purposes:
 if (!module.parent) {
