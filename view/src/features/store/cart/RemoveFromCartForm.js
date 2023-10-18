@@ -10,10 +10,15 @@ function RemoveFromCartForm({productId,size}) {
   const handleRemoveFromCart = (productId) => {
     dispatch(deleteCartItem({productId}))
   }
+
   const label = size === "sm" ? "Remove" : "Remove From Cart";
+  const mLabel = size === "sm" ? "X" : "Remove From Cart";
 
   return (
-    <Button onClick={()=>{handleRemoveFromCart(productId)}} variant="primary">{ label }</Button>
+    <>
+      <Button className="d-none d-xl-inline-block" onClick={()=>{handleRemoveFromCart(productId)}} variant="primary">{ label }</Button>
+      <Button className="d-inline-block d-xl-none" onClick={()=>{handleRemoveFromCart(productId)}} variant="primary">{ mLabel }</Button>
+    </>
   );
 }
 

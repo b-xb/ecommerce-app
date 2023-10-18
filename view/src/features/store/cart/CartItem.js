@@ -21,7 +21,7 @@ function CartItem({cartItem}) {
         <Col xs={2} >
           <Image src="/images/no-image.svg" fluid />
         </Col>
-        <Col xs={3} >
+        <Col xs={3} xl={2} >
           {product.name}
         </Col>
         <Col xs={1} className="text-center">
@@ -39,7 +39,7 @@ function CartItem({cartItem}) {
         <Col xs={1} className="text-end">
           { price(product.unit_price * amount) }
         </Col>
-        <Col xs={1} className="text-center">
+        <Col xs={1} xl={2} className="d-none d-lg-block text-center">
           <RemoveFromCartForm productId={product_id} size="sm" />
         </Col>
       </Row>
@@ -47,13 +47,18 @@ function CartItem({cartItem}) {
         <Col xs={2} >
           <Image src="/images/no-image.svg" fluid />
         </Col>
-        <Col xs={5} >
+        <Col xs={3} >
           <div>{ product.name }</div>
           <div>{ price(product.unit_price) }</div>
         </Col>
-        <Col xs={5} className="text-end">
-          <div>x { amount }</div>
-          <div>= { price(product.unit_price * amount) }</div>
+        <Col xs={3} >
+          <UpdateCartForm productId={product_id} amount={amount} />
+        </Col>
+        <Col xs={2} className="text-end">
+          <div>{ price(product.unit_price * amount) }</div>
+        </Col>
+        <Col xs={1} className="text-center">
+          <RemoveFromCartForm productId={product_id} size="sm" />
         </Col>
       </Row>
     </ListGroup.Item>
