@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 
+import UpdateCartForm from './UpdateCartForm';
 import { price } from '../../../utils/formatters';
 
-function CartItem({cartItem, handleUpdate}) {
+function CartItem({cartItem}) {
   const { product_id, amount } = cartItem;
   const product = useSelector(state => selectProductById(state, product_id))
 
@@ -29,10 +29,8 @@ function CartItem({cartItem, handleUpdate}) {
         <Col xs={1} className="text-center">
           x
         </Col>
-        <Col xs={2} className="text-center text-nowrap d-flex align-items-center justify-content-center">
-          <Button variant="dark" className="rounded-circle" size="sm" onClick={()=>handleUpdate(product_id,amount-1)}>-</Button>
-          <span className="d-inline-block px-2">{amount}</span>
-          <Button variant="dark" size="sm" className="rounded-circle" onClick={()=>handleUpdate(product_id,amount+1)}>+</Button>
+        <Col xs={2} className="text-center">
+          <UpdateCartForm productId={product_id} amount={amount} />
         </Col>
         <Col xs={1} className="text-center">
           =

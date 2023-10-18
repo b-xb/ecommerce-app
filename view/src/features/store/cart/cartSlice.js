@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getCartItemsByUser, updateCartItemByUserAndProduct } from '../../../api/users';
+import { getCartItemsByUser, addCartItemByUserAndProduct, updateCartItemByUserAndProduct } from '../../../api/users';
 
 const initialState = {
   isLoading: false,
@@ -13,6 +13,16 @@ export const loadCartItems = createAsyncThunk(
     const { auth } = getState();
     const userId = auth.session.userId;
     const response = await getCartItemsByUser(userId);
+    return response;
+  }
+);
+
+export const addCartItem = createAsyncThunk(
+  'store/cart/addCartItem',
+  async ({ productId, amount }, {getState}) => {
+    const { auth } = getState();
+    const userId = auth.session.userId;
+    const response = await addCartItemByUserAndProduct(userId, productId, amount);
     return response;
   }
 );
@@ -59,10 +69,25 @@ export const cartSlice = createSlice({
         });
         state.isUpdating = false;
       })
+      .addCase(addCartItem.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(addCartItem.fulfilled, (state, {payload}) => {
+        const { userId, productId, amount } = payload;
+        state.cartItems.push({
+          user_id: userId, 
+          product_id: productId, 
+          amount
+        })
+        state.isUpdating = false;
+      })
   },
 });
 
 export const selectCartItems = (state) => state.store.cart.cartItems;
+export const selectCartItem = (state,productId) => state.store.cart.cartItems.find(
+  (cartItem) => cartItem.product_id == productId
+);
 
 export const isLoading = (state) => state.store.cart.isLoading;
 

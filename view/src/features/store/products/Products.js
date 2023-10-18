@@ -6,7 +6,10 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { loadProducts, selectProducts } from './productsSlice';
+import { loadCartItems, addCartItem, updateCartItem } from '../cart/cartSlice';
 import { price } from '../../../utils/formatters';
+
+import ProductSummary from './ProductSummary';
 
 function Products() {
 
@@ -17,19 +20,26 @@ function Products() {
     dispatch(loadProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (products.length>0) {
+      dispatch(loadCartItems());
+    }
+  }, [dispatch,products]);
+
+  const handleAddToCart = (productId, amount) => {
+    dispatch(addCartItem({productId, amount}))
+  }
+
+  const handleUpdateCart = (productId, amount) => {
+    dispatch(updateCartItem({productId, amount}))
+  }
+
   return (
     <div data-testid="store-products">
       <Row xs={1} md={2} lg={4} className="g-4 text-center">
         {products.map((product) => (
           <Col key={product.id}>
-            <Card>
-              <Card.Img variant="top" src="/images/no-image.svg" />
-              <Card.Body className="d-flex flex-column">
-                <Card.Title>{ product.name }</Card.Title>
-                <Card.Text>{ price(product.unit_price) }</Card.Text>
-                <Button variant="primary">Add To Cart</Button>
-              </Card.Body>
-            </Card>
+            <ProductSummary product={product}/>
           </Col>
         ))}
       </Row>
