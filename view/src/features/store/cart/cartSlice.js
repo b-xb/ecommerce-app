@@ -13,7 +13,8 @@ export const loadCartItems = createAsyncThunk(
     const { auth } = getState();
     const userId = auth.session.userId;
     const response = await getCartItemsByUser(userId);
-    return response;
+    if (response.error) return [];
+    else return response;
   }
 );
 

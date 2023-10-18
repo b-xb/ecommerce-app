@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
 import { loadProducts, selectProducts } from './productsSlice';
-import { loadCartItems, addCartItem, updateCartItem } from '../cart/cartSlice';
-import { price } from '../../../utils/formatters';
+import { loadCartItems } from '../cart/cartSlice';
 
 import ProductSummary from './ProductSummary';
 
+import { selectLoginState } from '../../../features/authentication/session/sessionSlice';
+
 function Products() {
+
+  const loggedIn = useSelector(selectLoginState);
 
   const products = useSelector(selectProducts);
   const dispatch = useDispatch();
@@ -21,18 +22,10 @@ function Products() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (products.length>0) {
+    if (loggedIn && products.length>0) {
       dispatch(loadCartItems());
     }
-  }, [dispatch,products]);
-
-  const handleAddToCart = (productId, amount) => {
-    dispatch(addCartItem({productId, amount}))
-  }
-
-  const handleUpdateCart = (productId, amount) => {
-    dispatch(updateCartItem({productId, amount}))
-  }
+  }, [dispatch,loggedIn,products]);
 
   return (
     <div data-testid="store-products">
