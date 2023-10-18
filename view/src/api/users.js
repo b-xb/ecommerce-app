@@ -37,7 +37,16 @@ export const updateCartItemByUserAndProduct = async (userId, productId, amount) 
     },   
   });
   const responseData = await response.json();
-
-  
   return responseData;
+};
+
+export const deleteCartItemByUserAndProduct = async (userId, productId) => {
+  const response = await fetch(`${API_ENDPOINT}/users/${userId}/cart-items/${productId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    return {productId};
+  } else {
+    return null;
+  }
 };

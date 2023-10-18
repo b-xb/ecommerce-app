@@ -12,11 +12,11 @@ function UpdateCartForm({productId,amount}) {
   }
 
   return (
-    <div className="text-center text-nowrap d-flex align-items-center justify-content-center">
+    <span className="text-center text-nowrap d-flex align-items-center justify-content-center">
       <Button variant="dark" className="rounded-circle" size="sm" onClick={()=>handleUpdate(productId,amount-1)} disabled={amount<=1}>-</Button>
       <span className="d-inline-block px-2">{amount}</span>
       <Button variant="dark" className="rounded-circle" size="sm" onClick={()=>handleUpdate(productId,amount+1)}>+</Button> {/* TODO: disabled when equal to the amount in stock */}
-    </div>
+    </span>
   );
 }
 

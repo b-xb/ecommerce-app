@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getCartItemsByUser, addCartItemByUserAndProduct, updateCartItemByUserAndProduct } from '../../../api/users';
+import { getCartItemsByUser, addCartItemByUserAndProduct, updateCartItemByUserAndProduct, deleteCartItemByUserAndProduct } from '../../../api/users';
 
 const initialState = {
   isLoading: false,
@@ -42,6 +42,16 @@ export const updateCartItem = createAsyncThunk(
   }
 );
 
+export const deleteCartItem = createAsyncThunk(
+  'store/cart/deleteCartItem',
+  async ({ productId }, {getState}) => {
+    const { auth } = getState();
+    const userId = auth.session.userId;
+    const response = await deleteCartItemByUserAndProduct(userId, productId);
+    return response;
+  }
+);
+
 export const cartSlice = createSlice({
   name: 'store/cart/',
   initialState,
@@ -80,6 +90,19 @@ export const cartSlice = createSlice({
           amount
         })
         state.isUpdating = false;
+      })
+      .addCase(deleteCartItem.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(deleteCartItem.fulfilled, (state, {payload}) => {
+        if (payload !== null) {
+          const { productId } = payload;
+          state.cartItems = state.cartItems.filter((cartItem) => {
+            return cartItem.product_id != productId;
+          });
+          state.isUpdating = false;
+        }
+
       })
   },
 });

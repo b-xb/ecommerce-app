@@ -8,6 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Image from 'react-bootstrap/Image';
 
 import UpdateCartForm from './UpdateCartForm';
+import RemoveFromCartForm from './RemoveFromCartForm';
 import { price } from '../../../utils/formatters';
 
 function CartItem({cartItem}) {
@@ -35,8 +36,11 @@ function CartItem({cartItem}) {
         <Col xs={1} className="text-center">
           =
         </Col>
-        <Col xs={2} className="text-end">
+        <Col xs={1} className="text-end">
           { price(product.unit_price * amount) }
+        </Col>
+        <Col xs={1} className="text-center">
+          <RemoveFromCartForm productId={product_id} size="sm" />
         </Col>
       </Row>
       <Row className="d-flex d-lg-none align-items-center">

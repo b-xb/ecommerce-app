@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Card from 'react-bootstrap/Card';
 import UpdateCartForm from '../cart/UpdateCartForm';
+import RemoveFromCartForm from '../cart/RemoveFromCartForm';
 import Button from 'react-bootstrap/Button';
-import { selectCartItem, addCartItem, updateCartItem } from '../cart/cartSlice';
+import { selectCartItem, addCartItem } from '../cart/cartSlice';
 import { price } from '../../../utils/formatters';
 
 function ProductSummary({product}) {
@@ -24,7 +25,8 @@ function ProductSummary({product}) {
         <Card.Title>{ product.name }</Card.Title>
         <Card.Text>{ price(product.unit_price) }</Card.Text>
         {!cartItem && <Button onClick={()=>{handleAddToCart(product.id, 1)}} variant="primary">Add To Cart</Button>}
-        {cartItem &&  <UpdateCartForm productId={product.id} amount={cartItem.amount} /> }
+        {cartItem &&  <p><UpdateCartForm productId={product.id} amount={cartItem.amount} /></p> }
+        {cartItem &&  <RemoveFromCartForm productId={product.id} /> }
       </Card.Body>
     </Card>
   );

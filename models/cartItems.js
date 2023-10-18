@@ -21,7 +21,7 @@ exports.updateByUserIdAndProductId = async (userId,productId,amount) => pool.que
 );
 
 exports.deleteByUserIdAndProductId = async (userId,productId) => pool.query(
-  'DELETE FROM cart_items WHERE user_id = $1AND product_id = $2',
+  'DELETE FROM cart_items WHERE user_id = $1 AND product_id = $2',
   [userId,productId]
 );
 
