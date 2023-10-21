@@ -19,8 +19,11 @@
     "supertest": "^6.3.3"
   },
   "scripts": {
-    "build": "npm install --no-save && rm -rf build && cd ./view && npm install --no-save && npm run build --prod && cp -r build ../",
+    "build": "npm install --no-save && rm -rf static && cd ./view && npm install --no-save && npm run build --prod && cp -r static ../",
     "test": "bin/mocha-test",
     "start": "node app.js"
+  },
+  "engines": {
+    "node":"16.x"
   }
 }
