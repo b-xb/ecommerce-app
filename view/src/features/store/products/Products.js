@@ -30,7 +30,7 @@ function Products() {
   return (
     <div data-testid="store-products">
       <Row xs={1} md={2} lg={4} className="g-4 text-center">
-        {products.map((product) => (
+        {products && products.map((product) => (
           <Col key={product.id}>
             <ProductSummary product={product}/>
           </Col>
