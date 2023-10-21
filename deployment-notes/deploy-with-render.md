@@ -51,6 +51,51 @@ In this example the data is being imported from a csv file in the mocks folder (
 
 ### create web service
 
+Create a new web service instance by clicking on.
+
+```
+New -> Web Service
+```
+
+Fill in the form as you wish, noting the following...
+
+*Region:*
+
+This should match the region setting for your database
+
+*Repository:*
+
+This should match the following format 
+
+`https://github.com/b-xb/ecommerce-app`
+
+You can deploy from this repository but I would recommend creating your own fork and deploying from that instead.
+
+*Branch:*
+
+This can be any branch you want.
+
+Note, however, that by default any new commit pushed to this branch will be deployed
+
+*Root Directory:*
+
+leave this blank
+
+*Build Command*
+
+If you want to build the frontend on the server set this to
+
+`npm run build`
+
+Otherwise, if you'd prefer to pre-build the frontend on the client side before pushing it to the server set this to
+
+`npm install`
+
+*Start Command*
+
+`npm run start`
+
+
 npm run build
 
 ### add environment variables
