@@ -42,7 +42,7 @@ app.get('/*', function (req, res) {
 });
 
 // This conditional is here for testing purposes:
-if (!module.parent) {
+if (!module.parent || process.env.FORCE_DEPLOY) {
   app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
   });
