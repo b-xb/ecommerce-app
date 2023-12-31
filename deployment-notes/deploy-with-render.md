@@ -15,10 +15,10 @@
 
 4. open your terminal at the base of the project folder
 
-5. paste the "PSQL Command" into your terminal 
+5. paste the "PSQL Command" into your terminal
 
 
-### setting the timezone 
+### setting the timezone
 
 The timezone should already be set to UTC
 
@@ -33,7 +33,7 @@ SELECT * FROM pg_timezone_names WHERE abbrev = current_setting('TIMEZONE');
 to run the database setup script from psql type the following
 
 ```
-\i ./models/db-setup.sql 
+\i ./models/db-setup.sql
 ```
 
 ### loading data into the database
@@ -65,7 +65,7 @@ This should match the region setting for your database
 
 *Repository:*
 
-This should match the following format 
+This should match the following format
 
 `https://github.com/b-xb/ecommerce-app`
 
@@ -94,9 +94,6 @@ Otherwise, if you'd prefer to pre-build the frontend on the client side before p
 *Start Command*
 
 `npm run start`
-
-
-npm run build
 
 ### add environment variables
 

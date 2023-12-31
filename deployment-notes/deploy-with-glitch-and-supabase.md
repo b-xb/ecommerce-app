@@ -1,5 +1,11 @@
 # Deploy to Glitch and Supabase
 
+Glitch currently only supports Node 16 and so this guide provides instructions to install a version of this app that runs on Node 16
+
+You can check the following link to see if this has changed...
+
+https://help.glitch.com/hc/en-us/articles/16287495688845-What-version-of-Node-can-I-use-and-how-do-I-change-update-upgrade-it-
+
 ## set up database
 
 ### create database project in Supabase
@@ -21,7 +27,7 @@ When prompted for a password, type in the password that you added when you set u
 If you need to reset the password, you can also do this from the Database Settings page
 
 
-### setting the timezone 
+### setting the timezone
 
 The timezone should already be set to UTC
 
@@ -36,7 +42,7 @@ SELECT * FROM pg_timezone_names WHERE abbrev = current_setting('TIMEZONE');
 To run the database setup script from psql type the following
 
 ```
-\i ./models/db-setup.sql 
+\i ./models/db-setup.sql
 ```
 
 ### loading data into the database
@@ -56,19 +62,31 @@ In this example the data is being imported from a csv file in the mocks folder (
 
 1. Log in to Glitch.com (set up an account if needed)
 
-2. Click on New Project -> Import from Github
+2. Visit the following link to create a blank project
 
-3. Paste the URL for this project
+   https://glitch.com/edit/#!/remix/glitch-blank-website
 
-```
-https://github.com/b-xb/ecommerce-app.git
-```
+3. After the app has been created, click on **Terminal**
+
+   Now type the following...
+
+   ```
+   cd /
+   rm -rf /app/*
+   rm -rf /app/.*
+   git clone https://github.com/b-xb/ecommerce-app.git app
+   cd app
+   git checkout node-16
+   refresh
+   ```
 
 ### add environment variables
 
-To set up the environment variables click on the .env file and enter each variable one at a time
+Create a file at the base of the project called `.env`, if it doesn't already exist
 
-see example.env for the variables you will need to add
+Now click on the .env file and enter each environment variable one at a time
+
+See example.env for the variables you will need to add
 
 You will need to copy accross the values from the Database Settings page at Supabase
 

@@ -126,7 +126,7 @@ In CPanel, go to **Software -> Setup Node.js App**
 
 Fill in the form as follows, and then click on **Create**
 
-- Node.js version: select version 16
+- Node.js version: select version 18
 - Application mode: `Production`
 - Application root: the root path of the project, e.g.
   ```
