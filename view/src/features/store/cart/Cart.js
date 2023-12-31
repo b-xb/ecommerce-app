@@ -7,18 +7,24 @@ import CartItem from './CartItem';
 import { loadCartItems, selectCartItems } from './cartSlice';
 import { loadProducts } from '../products/productsSlice';
 import { selectLoginState } from '../../../features/authentication/session/sessionSlice';
+import { useNavigate } from "react-router-dom";
 
 
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const cartItems = useSelector(selectCartItems);  
+  const cartItems = useSelector(selectCartItems);
   const loggedIn = useSelector(selectLoginState); // TODO: make use of this
 
   useEffect(() => {
-    dispatch(loadProducts());
-    dispatch(loadCartItems());
-  }, [dispatch]);
+    if (loggedIn) {
+      dispatch(loadProducts());
+      dispatch(loadCartItems());
+    } else {
+      navigate('/');
+    }
+  }, [dispatch,loggedIn]);
 
   return (
     <div data-testid="store-cart">
