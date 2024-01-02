@@ -17,6 +17,7 @@ function CartItem({cartItem}) {
 
   return (
     <ListGroup.Item>
+
       <Row className="d-none d-lg-flex align-items-center">
         <Col xs={2} >
           <Image src="/images/no-image.svg" fluid />
@@ -39,11 +40,15 @@ function CartItem({cartItem}) {
         <Col xs={1} className="text-end">
           { price(product.unit_price * amount) }
         </Col>
-        <Col xs={1} xl={2} className="d-none d-lg-block text-center">
+        <Col xs={1} className="d-lg-block d-xl-none text-center">
+          <RemoveFromCartForm productId={product_id} size="xs" />
+        </Col>
+        <Col xs={2} className="d-none d-xl-block text-center">
           <RemoveFromCartForm productId={product_id} size="sm" />
         </Col>
       </Row>
-      <Row className="d-flex d-lg-none align-items-center">
+
+      <Row className="d-none d-sm-flex d-lg-none align-items-center">
         <Col xs={2} >
           <Image src="/images/no-image.svg" fluid />
         </Col>
@@ -57,8 +62,25 @@ function CartItem({cartItem}) {
         <Col xs={2} className="text-end">
           <div>{ price(product.unit_price * amount) }</div>
         </Col>
-        <Col xs={1} className="text-center">
-          <RemoveFromCartForm productId={product_id} size="sm" />
+        <Col xs={2} className="text-center">
+          <RemoveFromCartForm productId={product_id} size="xs" />
+        </Col>
+      </Row>
+
+      <Row className="d-flex d-sm-none align-items-center">
+        <Col xs={3} >
+          <Image src="/images/no-image.svg" fluid />
+        </Col>
+        <Col xs={3}>
+          <div>{ product.name }</div>
+          <div>{ price(product.unit_price) }</div>
+        </Col>
+        <Col xs={4} className="text-center text-no-wrap" >
+          <UpdateCartForm productId={product_id} amount={amount} />
+          <div>{ price(product.unit_price * amount) }</div>
+        </Col>
+        <Col xs={2} className="text-center">
+          <RemoveFromCartForm productId={product_id} size="xs"/>
         </Col>
       </Row>
     </ListGroup.Item>

@@ -11,13 +11,13 @@ function RemoveFromCartForm({productId,size}) {
     dispatch(deleteCartItem({productId}))
   }
 
-  const label = size === "sm" ? "Remove" : "Remove From Cart";
-  const mLabel = size === "sm" ? "X" : "Remove From Cart";
+  const label = size === "xs" ? "X" :
+                size === "sm" ? "Remove" :
+                "Remove From Cart";
 
   return (
     <>
-      <Button className="d-none d-xl-inline-block" onClick={()=>{handleRemoveFromCart(productId)}} variant="primary">{ label }</Button>
-      <Button className="d-inline-block d-xl-none" onClick={()=>{handleRemoveFromCart(productId)}} variant="primary">{ mLabel }</Button>
+      <Button className="d-inline-block" onClick={()=>{handleRemoveFromCart(productId)}} variant="primary">{ label }</Button>
     </>
   );
 }
