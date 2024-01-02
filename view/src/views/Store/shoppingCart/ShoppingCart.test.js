@@ -3,7 +3,7 @@ import { render } from '../../../utils/test-utils';
 import App from '../../../app/App';
 import { MemoryRouter } from 'react-router-dom';
 
-test('/store/cart path should load the Shopping Cart view', () => {
+test('/store/cart path should redirect to the store page when not logged in', () => {
   const route = "/store/cart";
   const { getByTestId } = render(
     <MemoryRouter initialEntries={[route]}>
@@ -11,5 +11,5 @@ test('/store/cart path should load the Shopping Cart view', () => {
     </MemoryRouter>
   );
 
-  expect(getByTestId(/^store-cart$/)).toBeInTheDocument();
+  expect(getByTestId(/^store$/)).toBeInTheDocument();
 });
