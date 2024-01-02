@@ -30,7 +30,7 @@ function NavigationMenu() {
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                Offcanvas
+                {t("Website Title")}
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
