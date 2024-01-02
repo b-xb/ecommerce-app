@@ -7,18 +7,19 @@ import { useDispatch } from 'react-redux';
 
 import { submitLogoutRequest } from '../../features/authentication/logoutRequest/logoutRequestSlice';
 
-function PrivateMenuItems() {
+function PrivateMenuItems({handleClose}) {
 
   const dispatch = useDispatch();
 
   const handleLogout = async (e) => {
     dispatch(submitLogoutRequest());
+    handleClose();
   };
 
   const expand = "md";
   return (
     <>
-      <Nav.Link as={NavLink} to="/store/cart">Shopping Cart</Nav.Link>
+      <Nav.Link as={NavLink} to="/store/cart" onClick={handleClose} >Shopping Cart</Nav.Link>
 
       <NavDropdown
         title="My Account"
