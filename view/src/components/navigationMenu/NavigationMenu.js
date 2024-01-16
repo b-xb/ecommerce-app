@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectLoginState } from '../../features/authentication/session/sessionSlice';
+import { verifySession, selectLoginState } from '../../features/authentication/session/sessionSlice';
 import PublicMenuItems from './PublicMenuItems';
 import PrivateMenuItems from './PrivateMenuItems';
 
 function NavigationMenu() {
+
+  const dispatch = useDispatch();
+
   const { t, i18n } = useTranslation();
 
   const loggedIn = useSelector(selectLoginState);
+
+  useEffect(() => {
+    if (loggedIn) {
+      dispatch(verifySession());
+    }
+  }, [dispatch,loggedIn]);
+
   const expand = "md";
 
   const [show, setShow] = useState(false);

@@ -36,3 +36,19 @@ export const authLogout = async () => {
     return null;
   }
 }
+
+export const authVerify = async () => {
+  try {
+    const response = await fetch(`${API_ENDPOINT}/auth/verify`);
+
+    if(response.ok) {
+      const responseData = await response.json();
+      return responseData;
+    } else {
+      return null;
+    }
+  } catch {
+    return {error:true};
+  }
+
+}

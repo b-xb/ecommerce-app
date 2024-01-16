@@ -1,6 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { authVerify } from '../../../api/auth';
 
 const defaultState = {
+  isSending: false,
   userId: null,
   loginState: false,
 };
@@ -8,6 +10,18 @@ const defaultState = {
 const storeSession = (sessionState) => {
   localStorage.setItem('e-commerce-session', JSON.stringify(sessionState));
 }
+
+export const verifySession = createAsyncThunk(
+  'auth/session/verify',
+  async (form,{dispatch}) => {
+    const response = await authVerify();
+    if (response===null || response.error || response.status === false) {
+      dispatch(clearSession());
+      return null;
+    }
+    return response;
+  }
+);
 
 const loadSession = () => {
   const sessionState = localStorage.getItem('e-commerce-session');
@@ -40,7 +54,16 @@ export const sessionSlice = createSlice({
       state.userId = null;
       state.loginState = false;
       storeSession(state);
-    }
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(verifySession.pending, (state,action) => {
+        state.isSending = true;
+      })
+      .addCase(verifySession.fulfilled, (state,action) => {
+        state.isSending = false;
+      });
   },
 });
 
