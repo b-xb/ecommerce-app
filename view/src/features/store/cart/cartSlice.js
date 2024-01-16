@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getCartItemsByUser, addCartItemByUserAndProduct, updateCartItemByUserAndProduct, deleteCartItemByUserAndProduct } from '../../../api/users';
+import { clearSession } from '../../authentication/session/sessionSlice';
 
 const initialState = {
   isLoading: false,
@@ -9,11 +10,14 @@ const initialState = {
 
 export const loadCartItems = createAsyncThunk(
   'store/cart/loadCartItems',
-  async (args, {getState}) => {
+  async (args, {getState,dispatch}) => {
     const { auth } = getState();
     const userId = auth.session.userId;
     const response = await getCartItemsByUser(userId);
-    if (response.error) return [];
+    if (response.error) {
+      dispatch(clearSession());
+      return [];
+    }
     else return response;
   }
 );
@@ -86,8 +90,8 @@ export const cartSlice = createSlice({
       .addCase(addCartItem.fulfilled, (state, {payload}) => {
         const { userId, productId, amount } = payload;
         state.cartItems.push({
-          user_id: userId, 
-          product_id: productId, 
+          user_id: userId,
+          product_id: productId,
           amount
         })
         state.isUpdating = false;

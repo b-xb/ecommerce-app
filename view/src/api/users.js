@@ -7,9 +7,14 @@ export const getUserById = async (userId) => {
 };
 
 export const getCartItemsByUser = async (userId) => {
-  const response = await fetch(`${API_ENDPOINT}/users/${userId}/cart-items`);
-  const responseData = await response.json();
-  return responseData;
+  try {
+    const response = await fetch(`${API_ENDPOINT}/users/${userId}/cart-items`);
+    const responseData = await response.json();
+    return responseData;
+  } catch {
+    return {error:true};
+  }
+
 };
 
 export const addCartItemByUserAndProduct = async (userId, productId, amount) => {
