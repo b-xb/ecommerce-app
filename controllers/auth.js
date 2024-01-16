@@ -36,6 +36,20 @@ exports.authLoginSuccess = async (req, res) => {
   } );
 };
 
+exports.authVerify = async (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.status(200).json({
+      message:"Stored session is valid",
+      success: true,
+    });
+  } else {
+    return res.status(401).json({
+      message:"Stored session is invalid",
+      success: false,
+    });
+  }
+};
+
 exports.authLogout = async (req, res) => {
 
   if (req.isAuthenticated()) {

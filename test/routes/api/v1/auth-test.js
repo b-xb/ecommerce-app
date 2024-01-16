@@ -217,4 +217,100 @@ describe('/api/v1/auth', () => {
       assert.equal(response.status, 200);
     });
   });
+
+
+  describe('POST /api/v1/auth/verify', () => {
+
+    before('Insert test user data', async () => {
+      const client = await pool.connect()
+      try {
+        const ingestStream = client.query(copyFrom(`COPY users FROM STDIN delimiter ',' NULL AS 'NULL' csv header`))
+        const sourceStream = fs.createReadStream('mocks/users.csv')
+        await pipeline(sourceStream, ingestStream)
+      } finally {
+        client.release()
+      }
+    })
+
+    after('Remove test user data', async () => {
+      await pool.query(`TRUNCATE users CASCADE`)
+    })
+
+    it('Returns a status OK response after the user logs in successfully', async () => {
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin));
+
+      assert.equal(loginResponse.status, 200);
+
+      const response = await agent
+        .get('/api/v1/auth/verify');
+
+      assert.equal(response.status, 200);
+    });
+
+    it('Throws an unauthorised error response when there is not a valid session', async () => {
+      const response = await request(app)
+        .get('/api/v1/auth/verify');
+
+      assert.equal(response.status, 401);
+    });
+
+    it('Throws an unauthorised error response after user logs out', async () => {
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin));
+
+      assert.equal(loginResponse.status, 200);
+
+      const logoutResponse = await agent
+        .post('/api/v1/auth/logout');
+
+      assert.equal(logoutResponse.status, 200);
+
+      const response = await agent
+        .get('/api/v1/auth/verify');
+
+      assert.equal(response.status, 401);
+    });
+
+    it('Throws an unauthorised error response after server session deleted', async () => {
+      const agent = request.agent(app)
+
+      const userLogin = {
+        "email":"liam@liam.com",
+        "password":"liamspassword",
+      };
+
+      const loginResponse = await agent
+        .post('/api/v1/auth/login')
+        .type('application/json')
+        .send(JSON.stringify(userLogin));
+
+      assert.equal(loginResponse.status, 200);
+
+      await pool.query(`TRUNCATE session CASCADE`)
+
+      const response = await agent
+        .get('/api/v1/auth/verify');
+
+      assert.equal(response.status, 401);
+    });
+  });
 });

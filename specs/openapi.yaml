@@ -354,6 +354,17 @@ paths:
           $ref: '#/components/responses/userSuccess'
       tags:
         - Authentication
+  /auth/verify:
+    get:
+      operationId: authVerify
+      summary: End User session
+      responses:
+        '200':
+          $ref: '#/components/responses/sessionValid'
+        '401':
+          $ref: '#/components/responses/sessionInvalid'
+      tags:
+        - Authentication
   /auth/logout:
     post:
       operationId: authLogout
@@ -536,6 +547,24 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Order'
+    SessionValid:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Stored session is valid
+        status:
+          type: boolean
+          example: true
+    SessionInvalid:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Stored session is invalid
+        status:
+          type: boolean
+          example: false
   parameters:
     userId:
       name: userId
@@ -642,6 +671,18 @@ components:
             type: string
           example: Logout operation was successful
       description: Logout operation was successful
+    sessionValid:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SessionValid'
+      description: Session is valid
+    sessionInvalid:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SessionInvalid'
+      description: Session is invalid
     genericStringResponse:
       content:
         application/json:
