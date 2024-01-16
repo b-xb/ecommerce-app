@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
+
+import { verifySession, selectLoginState } from '../features/authentication/session/sessionSlice';
 import NavigationMenu from '../components/navigationMenu/NavigationMenu';
 import LandingPage from '../views/LandingPage/LandingPage';
 import Store from '../views/Store/Store';
@@ -11,6 +14,16 @@ import Footer from '../components/Footer';
 import './App.css';
 
 function App() {
+
+  const dispatch = useDispatch();
+  const loggedIn = useSelector(selectLoginState);
+
+  useEffect(() => {
+    if (loggedIn) {
+      dispatch(verifySession());
+    }
+  }, [dispatch,loggedIn]);
+
   return (
     <>
       <NavigationMenu />
