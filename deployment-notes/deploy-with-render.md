@@ -85,7 +85,7 @@ leave this blank
 
 If you want to build the frontend on the server set this to
 
-`npm run build`
+`npm run build:nosave`
 
 Otherwise, if you'd prefer to pre-build the frontend on the client side before pushing it to the server set this to
 
