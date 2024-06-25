@@ -1,3 +1,6 @@
+## Demo
+
+Try out a demo of this app at https://ecommerce-demo.bencrosbie.me.uk/
 
 ## Setup
 
